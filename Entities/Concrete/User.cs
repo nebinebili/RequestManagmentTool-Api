@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class User
+    public class User:IEntity
     {
        public int Id { get; set; }
        public string FirstName { get; set; }
@@ -16,6 +17,11 @@ namespace Entities.Concrete
        public string Position { get; set; }
        public string InnerPhone { get; set; }
        public string MobilPhone { get; set; }
+       public string ProfilPicture { get; set; }
+       public bool NotificationPermission { get; set; }
+       public bool IsActive { get; set; }
+       public DateTime CreatedDate { get; set; }
+
 
     }
 }
