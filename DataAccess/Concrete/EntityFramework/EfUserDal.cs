@@ -11,6 +11,9 @@ namespace DataAccess.Concrete.EntityFramework
 {
     public class EfUserDal : EfEntityRepositoryBase<User, CICRequestContext>, IUserDal
     {
-        
+        public EfUserDal(CICRequestContext ctex) : base(ctex)
+        {
+
+        }
     }
 }

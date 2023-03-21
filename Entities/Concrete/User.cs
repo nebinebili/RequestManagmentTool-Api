@@ -22,6 +22,9 @@ namespace Entities.Concrete
        public bool IsActive { get; set; }
        public DateTime CreatedDate { get; set; }
 
+        public ICollection<Query> SenderQueries { get; set; }
+        public ICollection<Query> CreatorQueries { get; set; }
+
 
     }
 }

@@ -13,10 +13,8 @@ namespace DataAccess.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<Query> builder)
         {
-            builder.Property(u => u.Sender).HasMaxLength(50);
             builder.Property(u => u.Title).HasMaxLength(100);
-            builder.Property(u => u.Executor).HasMaxLength(100);
-            builder.Property(u => u.Date).HasDefaultValue(DateTime.UtcNow);
+            builder.Property(u => u.Date).HasDefaultValue(DateTime.Now);
         }
     }
 }

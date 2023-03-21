@@ -12,7 +12,7 @@ namespace Entities.Concrete
     {
         public short Id { get; set; }
 
-        public Enum.StatusType type { get; set; }
+        public Enum.StatusName Name { get; set; } = Enum.StatusName.HoldOn;
 
         public List<Query> Queries { get; set; } = new List<Query>();
 

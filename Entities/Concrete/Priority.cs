@@ -10,7 +10,7 @@ namespace Entities.Concrete
     public class Priority:IEntity
     {
         public short Id { get; set; }
-        public Enum.PriorityType Type { get; set; }
+        public Enum.PriorityName Name { get; set; }=Enum.PriorityName.Low;
 
         public List<Query> Queries { get; set; } = new List<Query>();
     }

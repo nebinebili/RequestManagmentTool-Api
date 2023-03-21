@@ -17,20 +17,9 @@ namespace DataAccess.Concrete.EntityFramework
 
         }
 
-     
         public CICRequestContext()
         {
             
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer(Configuration.ConnectionString);
-            }
-
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -39,6 +28,9 @@ namespace DataAccess.Concrete.EntityFramework
             modelBuilder.ApplyConfiguration(new QueryConfiguration());
             modelBuilder.ApplyConfiguration(new QueryTypeConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+
+            modelBuilder.Entity<Query>().HasOne(q=>q.Creator).WithMany(e=>e.CreatorQueries).HasForeignKey(q=>q.CreatorId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Query>().HasOne(q=>q.Sender).WithMany(e=>e.SenderQueries).HasForeignKey(q=>q.SenderId).IsRequired(false).OnDelete(DeleteBehavior.NoAction); 
         }
 
 

@@ -48,7 +48,7 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"), 1L, 1);
 
-                    b.Property<int>("Type")
+                    b.Property<int>("Name")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -64,43 +64,27 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<short>("CategoryId1")
+                    b.Property<short>("CategoryId")
                         .HasColumnType("smallint");
+
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 3, 15, 8, 40, 42, 21, DateTimeKind.Utc).AddTicks(3177));
+                        .HasDefaultValue(new DateTime(2023, 3, 21, 12, 0, 46, 397, DateTimeKind.Local).AddTicks(2028));
 
-                    b.Property<string>("Executor")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("PriorityId")
-                        .HasColumnType("int");
-
-                    b.Property<short>("PriorityId1")
+                    b.Property<short>("PriorityId")
                         .HasColumnType("smallint");
 
-                    b.Property<int>("QueryTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<short>("QueryTypeId1")
+                    b.Property<short>("QueryTypeId")
                         .HasColumnType("smallint");
 
-                    b.Property<string>("Sender")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("StatusId")
+                    b.Property<int>("SenderId")
                         .HasColumnType("int");
 
-                    b.Property<short>("StatusId1")
+                    b.Property<short>("StatusId")
                         .HasColumnType("smallint");
 
                     b.Property<string>("Text")
@@ -114,13 +98,17 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId1");
+                    b.HasIndex("CategoryId");
 
-                    b.HasIndex("PriorityId1");
+                    b.HasIndex("CreatorId");
 
-                    b.HasIndex("QueryTypeId1");
+                    b.HasIndex("PriorityId");
 
-                    b.HasIndex("StatusId1");
+                    b.HasIndex("QueryTypeId");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("StatusId");
 
                     b.ToTable("Queries");
                 });
@@ -151,7 +139,7 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"), 1L, 1);
 
-                    b.Property<int>("type")
+                    b.Property<int>("Name")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -168,7 +156,9 @@ namespace DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2023, 3, 21, 12, 0, 46, 397, DateTimeKind.Local).AddTicks(1872));
 
                     b.Property<string>("Department")
                         .IsRequired()
@@ -186,7 +176,9 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -226,33 +218,47 @@ namespace DataAccess.Migrations
                 {
                     b.HasOne("Entities.Concrete.Category", "Category")
                         .WithMany("Queries")
-                        .HasForeignKey("CategoryId1")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Entities.Concrete.User", "Creator")
+                        .WithMany("CreatorQueries")
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("Entities.Concrete.Priority", "Priority")
                         .WithMany("Queries")
-                        .HasForeignKey("PriorityId1")
+                        .HasForeignKey("PriorityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Entities.Concrete.QueryType", "QueryType")
                         .WithMany("Queries")
-                        .HasForeignKey("QueryTypeId1")
+                        .HasForeignKey("QueryTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Entities.Concrete.User", "Sender")
+                        .WithMany("SenderQueries")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("Entities.Concrete.Status", "Status")
                         .WithMany("Queries")
-                        .HasForeignKey("StatusId1")
+                        .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
 
+                    b.Navigation("Creator");
+
                     b.Navigation("Priority");
 
                     b.Navigation("QueryType");
+
+                    b.Navigation("Sender");
 
                     b.Navigation("Status");
                 });
@@ -275,6 +281,13 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Entities.Concrete.Status", b =>
                 {
                     b.Navigation("Queries");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.User", b =>
+                {
+                    b.Navigation("CreatorQueries");
+
+                    b.Navigation("SenderQueries");
                 });
 #pragma warning restore 612, 618
         }

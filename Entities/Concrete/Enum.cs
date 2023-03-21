@@ -8,8 +8,8 @@ namespace Entities.Concrete
 {
     public class Enum
     {
-        public enum StatusType { Open, Lock, Reject, Close, Approve, HoldOn }
+        public enum StatusName { Open, Lock, Reject, Close, Approve, HoldOn }
 
-        public enum PriorityType { Low, Medium, Hard }
+        public enum PriorityName { Low, Medium, Hard }
     }
 }
