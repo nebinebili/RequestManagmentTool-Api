@@ -11,16 +11,16 @@ namespace Business.Concrete
 {
     public class UserManager : IUserService
     {
-        IUserDal _userDal;
+        private readonly IUnitofWork unitofWork;
 
-        public UserManager(IUserDal userDal)
+        public UserManager(IUnitofWork unitofWork)
         {
-            _userDal = userDal;
+           this.unitofWork = unitofWork;
         }
 
         public User GetByFullName(string fullname)
         {
-            return _userDal.Get(u => (u.FirstName + ' ' + u.LastName) == fullname);
+            return unitofWork.User.Get(u => (u.FirstName + ' ' + u.LastName) == fullname);
         }
     }
 }
