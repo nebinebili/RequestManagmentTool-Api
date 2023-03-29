@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class Query:IEntity
+    public class Request:IEntity
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -19,16 +19,18 @@ namespace Entities.Concrete
         public short CategoryId { get; set; }
         public short StatusId { get; set; }
         public short PriorityId { get; set; }
-        public short QueryTypeId { get; set; }
-        public int SenderId { get; set; }
+        public short RequestTypeId { get; set; }
+        public int? SenderId { get; set; }
         public int CreatorId { get; set; }
 
         public Category Category { get; set; }
         public Status Status { get; set; }
         public Priority Priority { get; set; }
-        public QueryType QueryType { get; set; }
+        public RequestType RequestType { get; set; }
         public User Creator { get; set; }
         public User Sender { get; set; }
+
+        public ICollection<Comment> Comments { get; set; }
 
     }
 }

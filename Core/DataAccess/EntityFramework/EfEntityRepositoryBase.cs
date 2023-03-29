@@ -46,12 +46,12 @@ namespace Core.DataAccess.EntityFramework
             
         }
 
-        public List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
+        public IQueryable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
         {
             
                 return filter == null
-                    ? _context.Set<TEntity>().ToList()
-                    : _context.Set<TEntity>().Where(filter).ToList();
+                    ? _context.Set<TEntity>()
+                    : _context.Set<TEntity>().Where(filter);
             
         }
 

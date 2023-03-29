@@ -19,10 +19,13 @@ namespace DataAccess.Concrete
         {
             this._context = context;
             User=new EfUserDal(this._context);
+            Request=new EfRequestDal(this._context);
             
         }
 
         public IUserDal User { get; private set; }
+
+        public IRequestDal Request { get; private set; }
 
         public void Dispose()
         {

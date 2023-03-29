@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class QueryType:IEntity
+    public class RequestType:IEntity
     {
         public short Id { get; set; }
         public string Name { get; set; }
 
-        public List<Query> Queries { get; set; } = new List<Query>();
+        public List<Request> Requests { get; set; } = new List<Request>();
     }
 }

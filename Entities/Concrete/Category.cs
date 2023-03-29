@@ -12,6 +12,6 @@ namespace Entities.Concrete
         public short Id { get; set; } 
         public string Name { get; set; }
 
-        public List<Query> Queries { get; set; } = new List<Query>();
+        public List<Request> Requests { get; set; } = new List<Request>();
     }
 }

@@ -11,8 +11,10 @@ namespace Business.Constants
     {
         public static string UserNotFound = "User Not Found";
 
-        public static string SuccessfulLogin = "Successful Login";
+        public static string SuccessfullyLogin = "Successful Login";
 
         public static string PasswordError = "Password Error";
+
+        public static string SuccessfullyListed = "Successfully Listed";
     }
 }

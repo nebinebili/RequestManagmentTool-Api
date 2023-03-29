@@ -62,7 +62,6 @@ C:\Users\Admin\source\repos\CICRequestApi\WebAPI\obj\Debug\net6.0\WebAPI.Generat
 C:\Users\Admin\source\repos\CICRequestApi\WebAPI\obj\Debug\net6.0\WebAPI.AssemblyInfoInputs.cache
 C:\Users\Admin\source\repos\CICRequestApi\WebAPI\obj\Debug\net6.0\WebAPI.AssemblyInfo.cs
 C:\Users\Admin\source\repos\CICRequestApi\WebAPI\obj\Debug\net6.0\WebAPI.csproj.CoreCompileInputs.cache
-C:\Users\Admin\source\repos\CICRequestApi\WebAPI\obj\Debug\net6.0\WebAPI.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Admin\source\repos\CICRequestApi\WebAPI\obj\Debug\net6.0\WebAPI.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Admin\source\repos\CICRequestApi\WebAPI\obj\Debug\net6.0\staticwebassets\msbuild.WebAPI.Microsoft.AspNetCore.StaticWebAssets.props
 C:\Users\Admin\source\repos\CICRequestApi\WebAPI\obj\Debug\net6.0\staticwebassets\msbuild.build.WebAPI.props
@@ -78,3 +77,6 @@ C:\Users\Admin\source\repos\CICRequestApi\WebAPI\obj\Debug\net6.0\refint\WebAPI.
 C:\Users\Admin\source\repos\CICRequestApi\WebAPI\obj\Debug\net6.0\WebAPI.pdb
 C:\Users\Admin\source\repos\CICRequestApi\WebAPI\obj\Debug\net6.0\WebAPI.genruntimeconfig.cache
 C:\Users\Admin\source\repos\CICRequestApi\WebAPI\obj\Debug\net6.0\ref\WebAPI.dll
+C:\Users\Admin\source\repos\CICRequestApi\WebAPI\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\Admin\source\repos\CICRequestApi\WebAPI\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\Admin\source\repos\CICRequestApi\WebAPI\obj\Debug\net6.0\WebAPI.MvcApplicationPartsAssemblyInfo.cs

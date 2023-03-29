@@ -17,13 +17,15 @@ namespace Entities.Concrete
        public string Position { get; set; }
        public string InnerPhone { get; set; }
        public string MobilPhone { get; set; }
-       public string ProfilPicture { get; set; }
+       public string? ProfilPicture { get; set; }
        public bool NotificationPermission { get; set; }
        public bool IsActive { get; set; }
        public DateTime CreatedDate { get; set; }
 
-        public ICollection<Query> SenderQueries { get; set; }
-        public ICollection<Query> CreatorQueries { get; set; }
+        public ICollection<Request> SenderRequests { get; set; }
+        public ICollection<Request> CreatorRequests { get; set; }
+        public ICollection<Comment> Comments { get; set; }
+        public ICollection<History> Histories { get; set; }
 
 
     }

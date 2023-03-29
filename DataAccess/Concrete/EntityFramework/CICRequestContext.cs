@@ -25,21 +25,24 @@ namespace DataAccess.Concrete.EntityFramework
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
-            modelBuilder.ApplyConfiguration(new QueryConfiguration());
-            modelBuilder.ApplyConfiguration(new QueryTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new RequestConfiguration());
+            modelBuilder.ApplyConfiguration(new RequestTypeConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
 
-            modelBuilder.Entity<Query>().HasOne(q=>q.Creator).WithMany(e=>e.CreatorQueries).HasForeignKey(q=>q.CreatorId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Query>().HasOne(q=>q.Sender).WithMany(e=>e.SenderQueries).HasForeignKey(q=>q.SenderId).IsRequired(false).OnDelete(DeleteBehavior.NoAction); 
+            modelBuilder.Entity<Request>().HasOne(q=>q.Creator).WithMany(e=>e.CreatorRequests).HasForeignKey(q=>q.CreatorId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Request>().HasOne(q=>q.Sender).WithMany(e=>e.SenderRequests).HasForeignKey(q=>q.SenderId).IsRequired(false).OnDelete(DeleteBehavior.NoAction); 
         }
+
 
 
         public DbSet<User> Users { get; set; }
         public DbSet<Status> Statuses { get; set; }
-        public DbSet<QueryType> QueryTypes { get; set; }
-        public DbSet<Query> Queries { get; set; }
+        public DbSet<RequestType> RequestTypes { get; set; }
+        public DbSet<Request> Requests { get; set; }
         public DbSet<Priority> Priorities { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<History> Histories { get; set; }
 
     }
 }

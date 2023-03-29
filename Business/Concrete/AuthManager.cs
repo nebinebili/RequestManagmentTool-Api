@@ -34,7 +34,7 @@ namespace Business.Concrete
                 return new ErrorDataResult<User>(Messages.PasswordError);
             }
 
-            return new SuccessDataResult<User>(userCheck, Messages.SuccessfulLogin);
+            return new SuccessDataResult<User>(userCheck, Messages.SuccessfullyLogin);
         }
     }
 }

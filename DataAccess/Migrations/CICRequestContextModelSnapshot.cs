@@ -40,6 +40,57 @@ namespace DataAccess.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RequestId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.History", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Histories");
+                });
+
             modelBuilder.Entity("Entities.Concrete.Priority", b =>
                 {
                     b.Property<short>("Id")
@@ -48,15 +99,17 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"), 1L, 1);
 
-                    b.Property<int>("Name")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Priorities");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.Query", b =>
+            modelBuilder.Entity("Entities.Concrete.Request", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -73,19 +126,21 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 3, 21, 12, 0, 46, 397, DateTimeKind.Local).AddTicks(2028));
+                        .HasDefaultValue(new DateTime(2023, 3, 29, 20, 37, 14, 485, DateTimeKind.Local).AddTicks(5408));
 
                     b.Property<short>("PriorityId")
                         .HasColumnType("smallint");
 
-                    b.Property<short>("QueryTypeId")
+                    b.Property<short>("RequestTypeId")
                         .HasColumnType("smallint");
 
-                    b.Property<int>("SenderId")
+                    b.Property<int?>("SenderId")
                         .HasColumnType("int");
 
                     b.Property<short>("StatusId")
-                        .HasColumnType("smallint");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasDefaultValue((short)1);
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -104,16 +159,16 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("PriorityId");
 
-                    b.HasIndex("QueryTypeId");
+                    b.HasIndex("RequestTypeId");
 
                     b.HasIndex("SenderId");
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Queries");
+                    b.ToTable("Requests");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.QueryType", b =>
+            modelBuilder.Entity("Entities.Concrete.RequestType", b =>
                 {
                     b.Property<short>("Id")
                         .ValueGeneratedOnAdd()
@@ -128,7 +183,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("QueryTypes");
+                    b.ToTable("RequestTypes");
                 });
 
             modelBuilder.Entity("Entities.Concrete.Status", b =>
@@ -139,8 +194,10 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"), 1L, 1);
 
-                    b.Property<int>("Name")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -158,7 +215,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 3, 21, 12, 0, 46, 397, DateTimeKind.Local).AddTicks(1872));
+                        .HasDefaultValue(new DateTime(2023, 3, 29, 20, 37, 14, 485, DateTimeKind.Local).AddTicks(5230));
 
                     b.Property<string>("Department")
                         .IsRequired()
@@ -206,7 +263,6 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ProfilPicture")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -214,38 +270,68 @@ namespace DataAccess.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.Query", b =>
+            modelBuilder.Entity("Entities.Concrete.Comment", b =>
+                {
+                    b.HasOne("Entities.Concrete.Request", "Request")
+                        .WithMany("Comments")
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Concrete.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Request");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.History", b =>
+                {
+                    b.HasOne("Entities.Concrete.User", "User")
+                        .WithMany("Histories")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Request", b =>
                 {
                     b.HasOne("Entities.Concrete.Category", "Category")
-                        .WithMany("Queries")
+                        .WithMany("Requests")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Entities.Concrete.User", "Creator")
-                        .WithMany("CreatorQueries")
+                        .WithMany("CreatorRequests")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Entities.Concrete.Priority", "Priority")
-                        .WithMany("Queries")
+                        .WithMany("Requests")
                         .HasForeignKey("PriorityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Concrete.QueryType", "QueryType")
-                        .WithMany("Queries")
-                        .HasForeignKey("QueryTypeId")
+                    b.HasOne("Entities.Concrete.RequestType", "RequestType")
+                        .WithMany("Requests")
+                        .HasForeignKey("RequestTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Entities.Concrete.User", "Sender")
-                        .WithMany("SenderQueries")
+                        .WithMany("SenderRequests")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Entities.Concrete.Status", "Status")
-                        .WithMany("Queries")
+                        .WithMany("Requests")
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -256,7 +342,7 @@ namespace DataAccess.Migrations
 
                     b.Navigation("Priority");
 
-                    b.Navigation("QueryType");
+                    b.Navigation("RequestType");
 
                     b.Navigation("Sender");
 
@@ -265,29 +351,38 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concrete.Category", b =>
                 {
-                    b.Navigation("Queries");
+                    b.Navigation("Requests");
                 });
 
             modelBuilder.Entity("Entities.Concrete.Priority", b =>
                 {
-                    b.Navigation("Queries");
+                    b.Navigation("Requests");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.QueryType", b =>
+            modelBuilder.Entity("Entities.Concrete.Request", b =>
                 {
-                    b.Navigation("Queries");
+                    b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.RequestType", b =>
+                {
+                    b.Navigation("Requests");
                 });
 
             modelBuilder.Entity("Entities.Concrete.Status", b =>
                 {
-                    b.Navigation("Queries");
+                    b.Navigation("Requests");
                 });
 
             modelBuilder.Entity("Entities.Concrete.User", b =>
                 {
-                    b.Navigation("CreatorQueries");
+                    b.Navigation("Comments");
 
-                    b.Navigation("SenderQueries");
+                    b.Navigation("CreatorRequests");
+
+                    b.Navigation("Histories");
+
+                    b.Navigation("SenderRequests");
                 });
 #pragma warning restore 612, 618
         }

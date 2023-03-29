@@ -9,12 +9,11 @@ using System.Threading.Tasks;
 
 namespace DataAccess.EntityConfiguration
 {
-    public class QueryConfiguration : IEntityTypeConfiguration<Query>
+    public class RequestTypeConfiguration : IEntityTypeConfiguration<RequestType>
     {
-        public void Configure(EntityTypeBuilder<Query> builder)
+        public void Configure(EntityTypeBuilder<RequestType> builder)
         {
-            builder.Property(u => u.Title).HasMaxLength(100);
-            builder.Property(u => u.Date).HasDefaultValue(DateTime.Now);
+            builder.Property(u => u.Name).HasMaxLength(50);
         }
     }
 }

@@ -11,6 +11,8 @@ namespace DataAccess.Abstract
     public interface IUnitofWork:IDisposable
     {
         IUserDal User { get; }
+
+        IRequestDal Request { get; }
         int Complete();
     }
 }
