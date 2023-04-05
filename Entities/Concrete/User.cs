@@ -1,4 +1,4 @@
-﻿using Core.Entities;
+﻿using Entities.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,9 @@ namespace Entities.Concrete
        public int Id { get; set; }
        public string FirstName { get; set; }
        public string LastName { get; set; }
-       public string Password { get; set; }
+       public string UserName { get; set; }
+       public byte[] PasswordSalt { get; set; }
+       public byte[] PasswordHash { get; set; }
        public string Department { get; set; }
        public string Position { get; set; }
        public string InnerPhone { get; set; }
@@ -23,7 +25,7 @@ namespace Entities.Concrete
        public DateTime CreatedDate { get; set; }
 
         public ICollection<Request> SenderRequests { get; set; }
-        public ICollection<Request> CreatorRequests { get; set; }
+        public ICollection<Request> ExecutorRequests { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<History> Histories { get; set; }
 

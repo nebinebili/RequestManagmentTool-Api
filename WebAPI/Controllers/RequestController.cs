@@ -13,18 +13,28 @@ namespace WebAPI.Controllers
     public class RequestController : ControllerBase
     {
         private readonly IRequestService _requestService;
-        private readonly IMapper _mapper;
 
-        public RequestController(IRequestService requestService, IMapper mapper)
+
+        public RequestController(IRequestService requestService)
         {
             _requestService = requestService;
-            _mapper = mapper;
         }
 
-        [HttpGet("GetAllData")]
+        [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
-            return Ok(_mapper.Map<SuccessDataResult<List<RequestDto>>>(_requestService.GetAll()));
+            return Ok(_requestService.GetAllRequestDto());
+        }
+
+        [HttpGet("GetByCategoryId")]
+        public IActionResult GetByCategoryId(short id)
+        {
+            var result = _requestService.GetAllRequestDtoByCategoryId(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }

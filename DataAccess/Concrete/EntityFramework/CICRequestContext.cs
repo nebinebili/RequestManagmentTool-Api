@@ -1,4 +1,5 @@
-﻿using DataAccess.EntityConfiguration;
+﻿using Core.Entities.Concrete;
+using DataAccess.EntityConfiguration;
 using Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,7 +15,7 @@ namespace DataAccess.Concrete.EntityFramework
     {
         public CICRequestContext(DbContextOptions<CICRequestContext> contextOptions) : base(contextOptions)
         {
-
+            
         }
 
         public CICRequestContext()
@@ -29,8 +30,10 @@ namespace DataAccess.Concrete.EntityFramework
             modelBuilder.ApplyConfiguration(new RequestTypeConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
 
-            modelBuilder.Entity<Request>().HasOne(q=>q.Creator).WithMany(e=>e.CreatorRequests).HasForeignKey(q=>q.CreatorId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Request>().HasOne(q=>q.Sender).WithMany(e=>e.SenderRequests).HasForeignKey(q=>q.SenderId).IsRequired(false).OnDelete(DeleteBehavior.NoAction); 
+            modelBuilder.Entity<Request>().HasOne(q=>q.Executor).WithMany(e=>e.ExecutorRequests).HasForeignKey(q=>q.ExecutorId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Request>().HasOne(q=>q.Sender).WithMany(e=>e.SenderRequests).HasForeignKey(q=>q.SenderId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
+
+            
         }
 
 
@@ -43,6 +46,8 @@ namespace DataAccess.Concrete.EntityFramework
         public DbSet<Category> Categories { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<History> Histories { get; set; }
+        public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
+        public DbSet<OperationClaim> OperationClaims { get; set; }
 
     }
 }

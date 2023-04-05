@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿
+using Entities.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,6 @@ namespace Entities.Concrete
         public short Id { get; set; } 
         public string Name { get; set; }
 
-        public List<Request> Requests { get; set; } = new List<Request>();
+        public List<Request> Requests { get; set; }
     }
 }

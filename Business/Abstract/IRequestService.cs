@@ -12,8 +12,9 @@ namespace Business.Abstract
 {
     public interface IRequestService
     {
-        IDataResult<IQueryable<Request>> GetAll();
-
+        IDataResult<List<RequestDto>> GetAllRequestDto();
+        IDataResult<List<RequestDto>> GetAllRequestDtoByCategoryId(short categoryid);
         IResult Add(Request request);
+        IQueryable<Request> GetAllRequest();
     }
 }

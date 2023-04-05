@@ -16,14 +16,18 @@ namespace DataAccess.EntityConfiguration
         {
             builder.Property(u=>u.FirstName).HasMaxLength(20);
             builder.Property(u => u.LastName).HasMaxLength(20);
+            builder.Property(u => u.UserName).HasMaxLength(50);
             builder.Property(u=> u.Position).HasMaxLength(100);
             builder.Property(u=>u.Department).HasMaxLength(100);
             builder.Property(u=>u.InnerPhone).HasMaxLength(20);
-            builder.Property(u=>u.MobilPhone).HasMaxLength(20); 
-            builder.Property(u=>u.Password).HasMaxLength(20);
+            builder.Property(u=>u.MobilPhone).HasMaxLength(20);
+            builder.Property(u => u.PasswordHash).HasColumnType("varbinary").HasMaxLength(500);
+            builder.Property(u => u.PasswordSalt).HasColumnType("varbinary").HasMaxLength(500);
             builder.Property(u=>u.NotificationPermission).HasDefaultValue(true).IsRequired();
             builder.Property(u=>u.IsActive).HasDefaultValue(true);
             builder.Property(u=>u.CreatedDate).HasDefaultValue(DateTime.Now);
+
+
         }
     }
 }

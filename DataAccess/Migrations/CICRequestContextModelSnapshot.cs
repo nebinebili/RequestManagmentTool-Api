@@ -22,6 +22,43 @@ namespace DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("Core.Entities.Concrete.OperationClaim", b =>
+                {
+                    b.Property<short>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OperationClaims");
+                });
+
+            modelBuilder.Entity("Core.Entities.Concrete.UserOperationClaim", b =>
+                {
+                    b.Property<short>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"), 1L, 1);
+
+                    b.Property<short>("OperationClaimId")
+                        .HasColumnType("smallint");
+
+                    b.Property<short>("UserId")
+                        .HasColumnType("smallint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserOperationClaims");
+                });
+
             modelBuilder.Entity("Entities.Concrete.Category", b =>
                 {
                     b.Property<short>("Id")
@@ -120,13 +157,13 @@ namespace DataAccess.Migrations
                     b.Property<short>("CategoryId")
                         .HasColumnType("smallint");
 
-                    b.Property<int>("CreatorId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 3, 29, 20, 37, 14, 485, DateTimeKind.Local).AddTicks(5408));
+                        .HasDefaultValue(new DateTime(2023, 4, 5, 12, 33, 58, 664, DateTimeKind.Local).AddTicks(2008));
+
+                    b.Property<int>("ExecutorId")
+                        .HasColumnType("int");
 
                     b.Property<short>("PriorityId")
                         .HasColumnType("smallint");
@@ -155,7 +192,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("CreatorId");
+                    b.HasIndex("ExecutorId");
 
                     b.HasIndex("PriorityId");
 
@@ -215,7 +252,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 3, 29, 20, 37, 14, 485, DateTimeKind.Local).AddTicks(5230));
+                        .HasDefaultValue(new DateTime(2023, 4, 5, 12, 33, 58, 664, DateTimeKind.Local).AddTicks(1860));
 
                     b.Property<string>("Department")
                         .IsRequired()
@@ -252,10 +289,15 @@ namespace DataAccess.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
-                    b.Property<string>("Password")
+                    b.Property<byte[]>("PasswordHash")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(500)
+                        .HasColumnType("varbinary(500)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varbinary(500)");
 
                     b.Property<string>("Position")
                         .IsRequired()
@@ -264,6 +306,11 @@ namespace DataAccess.Migrations
 
                     b.Property<string>("ProfilPicture")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -308,9 +355,9 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Concrete.User", "Creator")
-                        .WithMany("CreatorRequests")
-                        .HasForeignKey("CreatorId")
+                    b.HasOne("Entities.Concrete.User", "Executor")
+                        .WithMany("ExecutorRequests")
+                        .HasForeignKey("ExecutorId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Entities.Concrete.Priority", "Priority")
@@ -338,7 +385,7 @@ namespace DataAccess.Migrations
 
                     b.Navigation("Category");
 
-                    b.Navigation("Creator");
+                    b.Navigation("Executor");
 
                     b.Navigation("Priority");
 
@@ -378,7 +425,7 @@ namespace DataAccess.Migrations
                 {
                     b.Navigation("Comments");
 
-                    b.Navigation("CreatorRequests");
+                    b.Navigation("ExecutorRequests");
 
                     b.Navigation("Histories");
 

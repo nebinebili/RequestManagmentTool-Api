@@ -13,6 +13,8 @@ namespace DataAccess.Abstract
         IUserDal User { get; }
 
         IRequestDal Request { get; }
+
+        ICategoryDal Category { get; }
         int Complete();
     }
 }

@@ -29,10 +29,10 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<User>(Messages.UserNotFound);
             }
-            if (userCheck.Password!=userForLoginDto.Password)
-            {
-                return new ErrorDataResult<User>(Messages.PasswordError);
-            }
+            //if (userCheck.Password!=userForLoginDto.Password)
+            //{
+            //    return new ErrorDataResult<User>(Messages.PasswordError);
+            //}
 
             return new SuccessDataResult<User>(userCheck, Messages.SuccessfullyLogin);
         }

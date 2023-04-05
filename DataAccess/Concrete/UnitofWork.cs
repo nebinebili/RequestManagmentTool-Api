@@ -1,5 +1,4 @@
-﻿using Core.DataAccess;
-using DataAccess.Abstract;
+﻿using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +25,9 @@ namespace DataAccess.Concrete
         public IUserDal User { get; private set; }
 
         public IRequestDal Request { get; private set; }
+
+        public ICategoryDal Category { get; private set; }
+
 
         public void Dispose()
         {
