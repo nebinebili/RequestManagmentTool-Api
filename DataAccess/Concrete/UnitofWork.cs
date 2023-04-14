@@ -19,7 +19,8 @@ namespace DataAccess.Concrete
             this._context = context;
             User=new EfUserDal(this._context);
             Request=new EfRequestDal(this._context);
-            
+            Category=new EfCategoryDal(this._context);
+            CategoryUser=new EfCategoryUserDal(this._context);
         }
 
         public IUserDal User { get; private set; }
@@ -28,6 +29,7 @@ namespace DataAccess.Concrete
 
         public ICategoryDal Category { get; private set; }
 
+        public ICategoryUserDal CategoryUser { get; private set; }
 
         public void Dispose()
         {

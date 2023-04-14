@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccess.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,12 +23,25 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OperationClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OperationClaims", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Priorities",
                 columns: table => new
                 {
                     Id = table.Column<short>(type: "smallint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -54,7 +67,7 @@ namespace DataAccess.Migrations
                 {
                     Id = table.Column<short>(type: "smallint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -69,19 +82,49 @@ namespace DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    PasswordSalt = table.Column<byte[]>(type: "varbinary(500)", maxLength: 500, nullable: false),
+                    PasswordHash = table.Column<byte[]>(type: "varbinary(500)", maxLength: 500, nullable: false),
                     Department = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Position = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     InnerPhone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     MobilPhone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    ProfilPicture = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProfilPicture = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NotificationPermission = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 3, 27, 10, 32, 25, 147, DateTimeKind.Local).AddTicks(8948))
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 4, 7, 12, 33, 40, 258, DateTimeKind.Local).AddTicks(7426))
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CategoryUsers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryId = table.Column<short>(type: "smallint", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    CreatePermisson = table.Column<bool>(type: "bit", nullable: false),
+                    ExecutePermisson = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategoryUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CategoryUsers_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CategoryUsers_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -112,13 +155,13 @@ namespace DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 3, 27, 10, 32, 25, 147, DateTimeKind.Local).AddTicks(9082)),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 4, 7, 12, 33, 40, 258, DateTimeKind.Local).AddTicks(7599)),
                     CategoryId = table.Column<short>(type: "smallint", nullable: false),
-                    StatusId = table.Column<short>(type: "smallint", nullable: false),
+                    StatusId = table.Column<short>(type: "smallint", nullable: false, defaultValue: (short)1),
                     PriorityId = table.Column<short>(type: "smallint", nullable: false),
                     RequestTypeId = table.Column<short>(type: "smallint", nullable: false),
-                    SenderId = table.Column<int>(type: "int", nullable: false),
-                    CreatorId = table.Column<int>(type: "int", nullable: false)
+                    SenderId = table.Column<int>(type: "int", nullable: true),
+                    ExecutorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -148,8 +191,8 @@ namespace DataAccess.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Requests_Users_CreatorId",
-                        column: x => x.CreatorId,
+                        name: "FK_Requests_Users_ExecutorId",
+                        column: x => x.ExecutorId,
                         principalTable: "Users",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -157,6 +200,32 @@ namespace DataAccess.Migrations
                         column: x => x.SenderId,
                         principalTable: "Users",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserOperationClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    OperationClaimId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserOperationClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserOperationClaims_OperationClaims_OperationClaimId",
+                        column: x => x.OperationClaimId,
+                        principalTable: "OperationClaims",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserOperationClaims_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -188,6 +257,16 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_CategoryUsers_CategoryId",
+                table: "CategoryUsers",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CategoryUsers_UserId",
+                table: "CategoryUsers",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Comments_RequestId",
                 table: "Comments",
                 column: "RequestId");
@@ -208,9 +287,9 @@ namespace DataAccess.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Requests_CreatorId",
+                name: "IX_Requests_ExecutorId",
                 table: "Requests",
-                column: "CreatorId");
+                column: "ExecutorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Requests_PriorityId",
@@ -231,10 +310,23 @@ namespace DataAccess.Migrations
                 name: "IX_Requests_StatusId",
                 table: "Requests",
                 column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserOperationClaims_OperationClaimId",
+                table: "UserOperationClaims",
+                column: "OperationClaimId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserOperationClaims_UserId",
+                table: "UserOperationClaims",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CategoryUsers");
+
             migrationBuilder.DropTable(
                 name: "Comments");
 
@@ -242,7 +334,13 @@ namespace DataAccess.Migrations
                 name: "Histories");
 
             migrationBuilder.DropTable(
+                name: "UserOperationClaims");
+
+            migrationBuilder.DropTable(
                 name: "Requests");
+
+            migrationBuilder.DropTable(
+                name: "OperationClaims");
 
             migrationBuilder.DropTable(
                 name: "Categories");

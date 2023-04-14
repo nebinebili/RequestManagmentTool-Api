@@ -20,8 +20,8 @@ namespace Entities.Concrete
         public short StatusId { get; set; }
         public short PriorityId { get; set; }
         public short RequestTypeId { get; set; }
-        public int? SenderId { get; set; }
-        public int ExecutorId { get; set; }
+        public int SenderId { get; set; }
+        public int? ExecutorId { get; set; }
 
         public Category Category { get; set; }
         public Status Status { get; set; }

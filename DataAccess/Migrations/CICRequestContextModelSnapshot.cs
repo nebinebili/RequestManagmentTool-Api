@@ -22,43 +22,6 @@ namespace DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Core.Entities.Concrete.OperationClaim", b =>
-                {
-                    b.Property<short>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OperationClaims");
-                });
-
-            modelBuilder.Entity("Core.Entities.Concrete.UserOperationClaim", b =>
-                {
-                    b.Property<short>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"), 1L, 1);
-
-                    b.Property<short>("OperationClaimId")
-                        .HasColumnType("smallint");
-
-                    b.Property<short>("UserId")
-                        .HasColumnType("smallint");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserOperationClaims");
-                });
-
             modelBuilder.Entity("Entities.Concrete.Category", b =>
                 {
                     b.Property<short>("Id")
@@ -75,6 +38,35 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.CategoryUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<short>("CategoryId")
+                        .HasColumnType("smallint");
+
+                    b.Property<bool>("CreatePermisson")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ExecutePermisson")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CategoryUsers");
                 });
 
             modelBuilder.Entity("Entities.Concrete.Comment", b =>
@@ -128,6 +120,24 @@ namespace DataAccess.Migrations
                     b.ToTable("Histories");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.OperationClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OperationClaims");
+                });
+
             modelBuilder.Entity("Entities.Concrete.Priority", b =>
                 {
                     b.Property<short>("Id")
@@ -160,9 +170,9 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 4, 5, 12, 33, 58, 664, DateTimeKind.Local).AddTicks(2008));
+                        .HasDefaultValue(new DateTime(2023, 4, 14, 11, 38, 46, 522, DateTimeKind.Local).AddTicks(4714));
 
-                    b.Property<int>("ExecutorId")
+                    b.Property<int?>("ExecutorId")
                         .HasColumnType("int");
 
                     b.Property<short>("PriorityId")
@@ -171,7 +181,7 @@ namespace DataAccess.Migrations
                     b.Property<short>("RequestTypeId")
                         .HasColumnType("smallint");
 
-                    b.Property<int?>("SenderId")
+                    b.Property<int>("SenderId")
                         .HasColumnType("int");
 
                     b.Property<short>("StatusId")
@@ -252,7 +262,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 4, 5, 12, 33, 58, 664, DateTimeKind.Local).AddTicks(1860));
+                        .HasDefaultValue(new DateTime(2023, 4, 14, 11, 38, 46, 522, DateTimeKind.Local).AddTicks(4574));
 
                     b.Property<string>("Department")
                         .IsRequired()
@@ -315,6 +325,48 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.UserOperationClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("OperationClaimId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OperationClaimId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserOperationClaims");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.CategoryUser", b =>
+                {
+                    b.HasOne("Entities.Concrete.Category", "Category")
+                        .WithMany("CategoryUsers")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Concrete.User", "User")
+                        .WithMany("CategoryUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Entities.Concrete.Comment", b =>
@@ -396,9 +448,35 @@ namespace DataAccess.Migrations
                     b.Navigation("Status");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.UserOperationClaim", b =>
+                {
+                    b.HasOne("Entities.Concrete.OperationClaim", "OperationClaim")
+                        .WithMany("UserOperationClaims")
+                        .HasForeignKey("OperationClaimId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Concrete.User", "User")
+                        .WithMany("UserOperationClaims")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OperationClaim");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Entities.Concrete.Category", b =>
                 {
+                    b.Navigation("CategoryUsers");
+
                     b.Navigation("Requests");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.OperationClaim", b =>
+                {
+                    b.Navigation("UserOperationClaims");
                 });
 
             modelBuilder.Entity("Entities.Concrete.Priority", b =>
@@ -423,6 +501,8 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concrete.User", b =>
                 {
+                    b.Navigation("CategoryUsers");
+
                     b.Navigation("Comments");
 
                     b.Navigation("ExecutorRequests");
@@ -430,6 +510,8 @@ namespace DataAccess.Migrations
                     b.Navigation("Histories");
 
                     b.Navigation("SenderRequests");
+
+                    b.Navigation("UserOperationClaims");
                 });
 #pragma warning restore 612, 618
         }

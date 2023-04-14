@@ -1,4 +1,5 @@
 ﻿using Core.Utilities.Results;
+using Core.Utilities.Security.JWT;
 using Entities.Concrete;
 using Entities.DTOs;
 using System;
@@ -12,5 +13,9 @@ namespace Business.Abstract
     public interface IAuthService
     {
         IDataResult<User> Login(UserLoginDto userForLoginDto);
+        IDataResult<User> Register(UserRegisterDto userForRegisterDto, string password);
+        IDataResult<AccessToken> CreateAccessToken(User user);
+
+        IResult UserExists(string username);
     }
 }

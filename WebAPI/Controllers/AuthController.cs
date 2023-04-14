@@ -1,7 +1,9 @@
 ﻿using Business.Abstract;
+using Core.Utilities.Results;
 using Entities.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace WebAPI.Controllers
 {
@@ -10,22 +12,70 @@ namespace WebAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthController(IAuthService authService)
+
+        public AuthController(IAuthService authService,IHttpContextAccessor httpContextAccessor)
         {
             _authService = authService;
+            _httpContextAccessor = httpContextAccessor;
+
         }
 
         [HttpPost("login")]
-        public  IActionResult Login(UserLoginDto userLoginDto)
+        public IActionResult Login(UserLoginDto userLoginDto)
         {
             var userLogin = _authService.Login(userLoginDto);
 
-            if(!userLogin.Success)
+            if (!userLogin.Success)
             {
                 return BadRequest(userLogin.Message);
             }
-            return Ok(userLogin);
+            var result = _authService.CreateAccessToken(userLogin.Data);
+            if (!result.Success)
+            {
+
+              return BadRequest(result.Message);
+            }
+            
+            return Ok(result.Data);
+
+
+        }
+
+        [HttpPost("register")]
+        public ActionResult Register(UserRegisterDto userRegisterDto)
+        {
+            var userExists = _authService.UserExists(userRegisterDto.UserName);
+            if (!userExists.Success)
+            {
+                return BadRequest(userExists.Message);
+            }
+
+            var registerResult = _authService.Register(userRegisterDto, userRegisterDto.Password);
+            if (!registerResult.Success)
+            {
+                return BadRequest(registerResult.Message);
+            }
+            var result = _authService.CreateAccessToken(registerResult.Data);
+            if (!result.Success)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return Ok(result.Data);
+
+        }
+
+        [HttpGet("current")]
+        public ActionResult CurrentId()
+        {
+           
+            int id=Convert.ToInt32(HttpContext.User.Claims.FirstOrDefault(c=>c.Type==ClaimTypes.NameIdentifier)?.Value);
+
+
+            return Ok(new {userId=id});
+
         }
     }
 }

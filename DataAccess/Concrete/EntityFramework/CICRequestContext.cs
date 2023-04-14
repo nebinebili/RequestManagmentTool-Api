@@ -1,5 +1,4 @@
-﻿using Core.Entities.Concrete;
-using DataAccess.EntityConfiguration;
+﻿using DataAccess.EntityConfiguration;
 using Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -48,6 +47,7 @@ namespace DataAccess.Concrete.EntityFramework
         public DbSet<History> Histories { get; set; }
         public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
         public DbSet<OperationClaim> OperationClaims { get; set; }
+        public DbSet<CategoryUser> CategoryUsers { get; set; }
 
     }
 }

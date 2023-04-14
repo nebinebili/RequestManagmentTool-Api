@@ -1,5 +1,4 @@
 ﻿using Autofac.Core;
-using Core.Entities.Concrete;
 using Core.Extensions;
 using Core.Utilities.Security.Encryption;
 using Entities.Concrete;

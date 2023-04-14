@@ -16,5 +16,6 @@ namespace Entities.DTOs
         public string ExecutorName { get; set; }
         public string SenderName { get; set; }
         public DateTime Date { get; set; }
+        
     }
 }

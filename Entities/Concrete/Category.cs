@@ -14,5 +14,6 @@ namespace Entities.Concrete
         public string Name { get; set; }
 
         public List<Request> Requests { get; set; }
+        public ICollection<CategoryUser> CategoryUsers { get; set; }
     }
 }

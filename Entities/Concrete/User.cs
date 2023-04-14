@@ -28,6 +28,9 @@ namespace Entities.Concrete
         public ICollection<Request> ExecutorRequests { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<History> Histories { get; set; }
+        public ICollection<CategoryUser> CategoryUsers { get; set; }
+        public ICollection<UserOperationClaim>  UserOperationClaims { get; set; }
+        
 
 
     }

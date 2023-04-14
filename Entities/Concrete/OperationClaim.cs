@@ -6,13 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Entities.Concrete
+namespace Entities.Concrete
 {
     public class OperationClaim : IEntity
     {
-        public short Id { get; set; }
+        public int Id { get; set; }
 
         [MaxLength(50)]
         public string Name { get; set; }
+
+        public ICollection<UserOperationClaim> UserOperationClaims { get; set; }
     }
 }

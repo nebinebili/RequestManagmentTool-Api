@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -11,16 +12,27 @@ namespace Business.Concrete
 {
     public class UserManager : IUserService
     {
-        private readonly IUnitofWork unitofWork;
+        private readonly IUnitofWork _unitofWork;
 
         public UserManager(IUnitofWork unitofWork)
         {
-           this.unitofWork = unitofWork;
+           _unitofWork = unitofWork;
         }
 
-        public User GetByFullName(string fullname)
+        public List<OperationClaim> GetClaims(User user)
         {
-            return unitofWork.User.Get(u => (u.FirstName + ' ' + u.LastName) == fullname);
+            return _unitofWork.User.GetClaims(user);
+        }
+
+        public User GetByUserName(string username)
+        {
+            return _unitofWork.User.Get(u=>u.UserName==username);
+        }
+
+        public void Add(User user)
+        {
+            _unitofWork.User.Add(user);
+            _unitofWork.Complete();
         }
     }
 }

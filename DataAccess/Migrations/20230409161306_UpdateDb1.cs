@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccess.Migrations
 {
-    public partial class UpdateDb8 : Migration
+    public partial class UpdateDb1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,20 +14,20 @@ namespace DataAccess.Migrations
                 table: "Users",
                 type: "datetime2",
                 nullable: false,
-                defaultValue: new DateTime(2023, 4, 1, 12, 49, 43, 969, DateTimeKind.Local).AddTicks(1218),
+                defaultValue: new DateTime(2023, 4, 9, 20, 13, 6, 57, DateTimeKind.Local).AddTicks(8847),
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2",
-                oldDefaultValue: new DateTime(2023, 3, 31, 22, 37, 50, 643, DateTimeKind.Local).AddTicks(8558));
+                oldDefaultValue: new DateTime(2023, 4, 7, 12, 33, 40, 258, DateTimeKind.Local).AddTicks(7426));
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "Date",
                 table: "Requests",
                 type: "datetime2",
                 nullable: false,
-                defaultValue: new DateTime(2023, 4, 1, 8, 49, 43, 969, DateTimeKind.Utc).AddTicks(1400),
+                defaultValue: new DateTime(2023, 4, 9, 20, 13, 6, 57, DateTimeKind.Local).AddTicks(8966),
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2",
-                oldDefaultValue: new DateTime(2023, 3, 31, 22, 37, 50, 643, DateTimeKind.Local).AddTicks(8688));
+                oldDefaultValue: new DateTime(2023, 4, 7, 12, 33, 40, 258, DateTimeKind.Local).AddTicks(7599));
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -37,20 +37,20 @@ namespace DataAccess.Migrations
                 table: "Users",
                 type: "datetime2",
                 nullable: false,
-                defaultValue: new DateTime(2023, 3, 31, 22, 37, 50, 643, DateTimeKind.Local).AddTicks(8558),
+                defaultValue: new DateTime(2023, 4, 7, 12, 33, 40, 258, DateTimeKind.Local).AddTicks(7426),
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2",
-                oldDefaultValue: new DateTime(2023, 4, 1, 12, 49, 43, 969, DateTimeKind.Local).AddTicks(1218));
+                oldDefaultValue: new DateTime(2023, 4, 9, 20, 13, 6, 57, DateTimeKind.Local).AddTicks(8847));
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "Date",
                 table: "Requests",
                 type: "datetime2",
                 nullable: false,
-                defaultValue: new DateTime(2023, 3, 31, 22, 37, 50, 643, DateTimeKind.Local).AddTicks(8688),
+                defaultValue: new DateTime(2023, 4, 7, 12, 33, 40, 258, DateTimeKind.Local).AddTicks(7599),
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2",
-                oldDefaultValue: new DateTime(2023, 4, 1, 8, 49, 43, 969, DateTimeKind.Utc).AddTicks(1400));
+                oldDefaultValue: new DateTime(2023, 4, 9, 20, 13, 6, 57, DateTimeKind.Local).AddTicks(8966));
         }
     }
 }

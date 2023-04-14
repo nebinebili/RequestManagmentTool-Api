@@ -81,3 +81,4 @@ C:\Users\Admin\source\repos\CICRequestApi\WebAPI\bin\Debug\net6.0\AutoMapper.dll
 C:\Users\Admin\source\repos\CICRequestApi\WebAPI\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\Admin\source\repos\CICRequestApi\WebAPI\obj\Debug\net6.0\WebAPI.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Admin\source\repos\CICRequestApi\WebAPI\bin\Debug\net6.0\Microsoft.Extensions.Configuration.dll
+C:\Users\Admin\source\repos\CICRequestApi\WebAPI\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Entities.Concrete
+namespace Entities.DTOs
 {
-    public class UserOperationClaim : IEntity
+    public class CategoryForUserIdDto:IDto
     {
         public short Id { get; set; }
-        public short UserId { get; set; }
-        public short OperationClaimId { get; set; }
+
+        public bool ExecutePermisson { get; set; }
+        public bool CreatePermisson { get; set; }
     }
 }
