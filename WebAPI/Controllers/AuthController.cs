@@ -67,15 +67,5 @@ namespace WebAPI.Controllers
 
         }
 
-        [HttpGet("current")]
-        public ActionResult CurrentId()
-        {
-           
-            int id=Convert.ToInt32(HttpContext.User.Claims.FirstOrDefault(c=>c.Type==ClaimTypes.NameIdentifier)?.Value);
-
-
-            return Ok(new {userId=id});
-
-        }
     }
 }

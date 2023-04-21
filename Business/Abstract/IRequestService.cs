@@ -12,9 +12,11 @@ namespace Business.Abstract
 {
     public interface IRequestService
     {
-        IDataResult<List<RequestDto>> GetAllRequestDto(bool Executepermisson, bool Createpermisson);
-        IDataResult<List<RequestDto>> GetAllRequestDtoByCategoryId(short categoryid);
+        IDataResult<List<RequestDto>> GetAllExecutableRequest();
+        IDataResult<List<RequestDto>> GetAllMyRequest();
+        IDataResult<List<RequestDto>> GetAllRequest();
+        IDataResult<List<RequestDto>> GetAllRequestByCategoryId(short categoryid);
+        IDataResult<List<RequestDto>> GetAllRequestByStatusId(short statusid);     
         IResult Add(CreateRequestDto  createRequestDto);
-        IQueryable<Request> GetAllRequest();
     }
 }

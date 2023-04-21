@@ -21,10 +21,32 @@ namespace WebAPI.Controllers
             _requestService = requestService;
         }
 
+        [HttpGet("GetAllExecutable")]
+        public IActionResult GetAllExecutable()
+        {
+            var result = _requestService.GetAllExecutableRequest();
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("GetAllMyRequest")]
+        public IActionResult GetAllMyRequest()
+        {
+            var result = _requestService.GetAllMyRequest();
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
-            var result = _requestService.GetAllRequestDto(true, false);
+            var result = _requestService.GetAllRequest();
             if (result.Success)
             {
                 return Ok(result);
@@ -33,9 +55,20 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("GetByCategoryId")]
-        public IActionResult GetByCategoryId(short id)
+        public IActionResult GetByCategoryId(short categoryid)
         {
-            var result = _requestService.GetAllRequestDtoByCategoryId(id);
+            var result = _requestService.GetAllRequestByCategoryId(categoryid);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpGet("GetByStatusId")]
+        public IActionResult GetByStatusId(short statusid)
+        {
+            var result = _requestService.GetAllRequestByStatusId(statusid);
             if (result.Success)
             {
                 return Ok(result);

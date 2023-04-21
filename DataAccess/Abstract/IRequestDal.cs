@@ -11,5 +11,8 @@ namespace DataAccess.Abstract
 {
     public interface IRequestDal:IEntityRepository<Request>
     {
+        public List<Request> GetAllExecutableRequest(int userId);
+        public List<Request> GetAllMyRequest(int userId);
+        public List<Request> GetAllRequest(int userId);
     }
 }

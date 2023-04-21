@@ -12,7 +12,6 @@ namespace DataAccess.Abstract
 {
     public interface ICategoryDal : IEntityRepository<Category>
     {
-        public List<CategoryForUserIdDto> GetCategoryForUserId(int userId);
 
     }
 }

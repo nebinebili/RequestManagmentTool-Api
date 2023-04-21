@@ -19,19 +19,5 @@ namespace DataAccess.Concrete.EntityFramework
             _context = ctex;
         }
 
-        public List<CategoryForUserIdDto> GetCategoryForUserId(int userId)
-        {
-            var result = from categoryUser in _context.CategoryUsers
-                         join category in _context.Categories on categoryUser.CategoryId equals category.Id
-                         where categoryUser.UserId==userId
-                         select new CategoryForUserIdDto
-                         {
-                              Id = category.Id,
-                              CreatePermisson=categoryUser.CreatePermisson,
-                              ExecutePermisson=categoryUser.ExecutePermisson,
-                         };
-            return result.ToList();
-
-        }
     }
 }

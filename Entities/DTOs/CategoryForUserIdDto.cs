@@ -1,4 +1,5 @@
 ﻿using Entities.Abstract;
+using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,7 @@ namespace Entities.DTOs
 
         public bool ExecutePermisson { get; set; }
         public bool CreatePermisson { get; set; }
+
+        public List<Request> Requests { get; set; }
     }
 }

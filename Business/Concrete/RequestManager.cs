@@ -49,48 +49,68 @@ namespace Business.Concrete
             return new SuccessResult(Messages.SuccessfullyCreated);
         }
 
-        public IDataResult<List<RequestDto>> GetAllRequestDto(bool Executepermisson, bool Createpermisson)
+        public IDataResult<List<RequestDto>> GetAllRequestByCategoryId(short categoryid)
         {
             int id = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
-            var categorylist = _unitofWork.Category.GetCategoryForUserId(id);
 
-            // categori id e gore requestler mueyyen edilir
-            List<Request> requestlist = new List<Request>();
-            foreach (var category in categorylist)
-            {
-                if (Executepermisson) requestlist.Add(GetAllRequest().Where(r => r.CategoryId == category.Id && category.ExecutePermisson == Executepermisson).SingleOrDefault());
-                if (Createpermisson) requestlist.Add(GetAllRequest().Where(r => r.CategoryId == category.Id && category.CreatePermisson == Createpermisson).SingleOrDefault());
-            }
-            requestlist.RemoveAll(item => item == null);
+
+            var requestlist = _unitofWork.Request.GetAllRequest(id).Where(r => r.CategoryId == categoryid).ToList();
+
             var data = _mapper.Map<List<RequestDto>>(requestlist);
 
             return new SuccessDataResult<List<RequestDto>>(data, Messages.SuccessfullyListed);
         }
 
-        public IDataResult<List<RequestDto>> GetAllRequestDtoByCategoryId(short categoryid)
+        public IDataResult<List<RequestDto>> GetAllRequestByStatusId(short statusid)
         {
             int id = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
-            var categorylist = _unitofWork.Category.GetCategoryForUserId(id);
 
-            List<Request> requestlist = new List<Request>();
-            foreach (var category in categorylist)
-            {
-                requestlist.Add(GetAllRequest().Where(r => r.CategoryId == category.Id && category.Id == categoryid && category.ExecutePermisson == true).SingleOrDefault());
-            }
-            requestlist.RemoveAll(item => item == null);
+
+            var requestlist = _unitofWork.Request.GetAllRequest(id).Where(r => r.StatusId == statusid).ToList();
+
             var data = _mapper.Map<List<RequestDto>>(requestlist);
 
             return new SuccessDataResult<List<RequestDto>>(data, Messages.SuccessfullyListed);
         }
 
-        public IQueryable<Request> GetAllRequest()
+
+        public IDataResult<List<RequestDto>> GetAllExecutableRequest()
         {
-            var data = (_unitofWork.Request.GetAll()
-                .Include(r => r.Category)
-                .Include(s => s.Status)
-                .Include(e => e.Executor)
-                .Include(s => s.Sender));
-            return data;
+            int id = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
+
+            var requestlist = _unitofWork.Request.GetAllExecutableRequest(id);
+
+
+            var data = _mapper.Map<List<RequestDto>>(requestlist);
+
+            return new SuccessDataResult<List<RequestDto>>(data, Messages.SuccessfullyListed);
+        }
+
+        public IDataResult<List<RequestDto>> GetAllMyRequest()
+        {
+            int id = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
+
+            var requestlist = _unitofWork.Request.GetAllMyRequest(id);
+
+
+            var data = _mapper.Map<List<RequestDto>>(requestlist);
+
+            return new SuccessDataResult<List<RequestDto>>(data, Messages.SuccessfullyListed);
+        }
+
+        public IDataResult<List<RequestDto>> GetAllRequest()
+        {
+            int id = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
+
+            var requestlist = _unitofWork.Request.GetAllRequest(id);
+
+
+            var data = _mapper.Map<List<RequestDto>>(requestlist);
+
+            return new SuccessDataResult<List<RequestDto>>(data, Messages.SuccessfullyListed);
         }
     }
 }
