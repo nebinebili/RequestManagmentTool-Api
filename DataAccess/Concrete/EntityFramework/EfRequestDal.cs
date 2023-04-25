@@ -19,25 +19,14 @@ namespace DataAccess.Concrete.EntityFramework
             _context = ctex;
         }
 
-        public List<Request> GetAllExecutableRequest(int userId)
-        {
-            var result = from r in _context.Requests
-                         join cu in _context.CategoryUsers on r.CategoryId equals cu.CategoryId
-                         where cu.ExecutePermisson==true && cu.UserId == userId && r.SenderId != userId
-                         select r;
-            return result
-                .Include(r => r.Category)
-                .Include(r => r.Status)
-                .Include(r => r.Executor)
-                .Include(r => r.Sender).ToList();
-        }
-
         public List<Request> GetAllMyRequest(int userId)
         {
             var result = from r in _context.Requests
                          join cu in _context.CategoryUsers on r.CategoryId equals cu.CategoryId
-                         where cu.CreatePermisson == true && cu.UserId == userId && r.SenderId == userId
+                         where (cu.CreatePermisson == true && r.SenderId == userId)   && cu.UserId == userId || 
+                               (cu.ExecutePermisson==true  && r.ExecutorId == userId) && cu.UserId == userId
                          select r;
+            
             return result
                 .Include(r => r.Category)
                 .Include(r => r.Status)

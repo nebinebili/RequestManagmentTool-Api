@@ -78,7 +78,9 @@ namespace DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2023, 4, 25, 13, 27, 50, 628, DateTimeKind.Local).AddTicks(2647));
 
                     b.Property<int>("RequestId")
                         .HasColumnType("int");
@@ -170,7 +172,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 4, 14, 11, 38, 46, 522, DateTimeKind.Local).AddTicks(4714));
+                        .HasDefaultValue(new DateTime(2023, 4, 25, 13, 27, 50, 628, DateTimeKind.Local).AddTicks(2169));
 
                     b.Property<int?>("ExecutorId")
                         .HasColumnType("int");
@@ -262,7 +264,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 4, 14, 11, 38, 46, 522, DateTimeKind.Local).AddTicks(4574));
+                        .HasDefaultValue(new DateTime(2023, 4, 25, 13, 27, 50, 628, DateTimeKind.Local).AddTicks(2013));
 
                     b.Property<string>("Department")
                         .IsRequired()

@@ -28,6 +28,7 @@ namespace DataAccess.Concrete.EntityFramework
             modelBuilder.ApplyConfiguration(new RequestConfiguration());
             modelBuilder.ApplyConfiguration(new RequestTypeConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new CommentConfiguration());
 
             modelBuilder.Entity<Request>().HasOne(q=>q.Executor).WithMany(e=>e.ExecutorRequests).HasForeignKey(q=>q.ExecutorId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Request>().HasOne(q=>q.Sender).WithMany(e=>e.SenderRequests).HasForeignKey(q=>q.SenderId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);

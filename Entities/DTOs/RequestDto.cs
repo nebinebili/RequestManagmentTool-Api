@@ -13,9 +13,11 @@ namespace Entities.DTOs
         public string Text { get; set; }
         public string CategoryName { get; set; }
         public string StatusName { get; set; }
+        public short StatusId { get; set; }
         public string ExecutorName { get; set; }
         public string SenderName { get; set; }
         public DateTime Date { get; set; }
+
         
     }
 }

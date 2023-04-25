@@ -21,21 +21,10 @@ namespace WebAPI.Controllers
             _requestService = requestService;
         }
 
-        [HttpGet("GetAllExecutable")]
-        public IActionResult GetAllExecutable()
-        {
-            var result = _requestService.GetAllExecutableRequest();
-            if (result.Success)
-            {
-                return Ok(result);
-            }
-            return BadRequest(result);
-        }
-
         [HttpGet("GetAllMyRequest")]
-        public IActionResult GetAllMyRequest()
+        public IActionResult GetAllMyRequest(short? statusid)
         {
-            var result = _requestService.GetAllMyRequest();
+            var result = _requestService.GetAllMyRequest(statusid);
             if (result.Success)
             {
                 return Ok(result);
@@ -43,10 +32,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        [HttpGet("GetMyRequestsCount")]
+        public IActionResult GetMyRequestsCount()
         {
-            var result = _requestService.GetAllRequest();
+            var result = _requestService.GetMyRequestsCount();
             if (result.Success)
             {
                 return Ok(result);
@@ -55,9 +44,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("GetByCategoryId")]
-        public IActionResult GetByCategoryId(short categoryid)
+        public IActionResult GetByCategoryId(short? categoryid, short? statusid)
         {
-            var result = _requestService.GetAllRequestByCategoryId(categoryid);
+            var result = _requestService.GetAllRequestByCategoryId(categoryid,statusid);
             if (result.Success)
             {
                 return Ok(result);
@@ -65,15 +54,21 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("GetByStatusId")]
-        public IActionResult GetByStatusId(short statusid)
+        [HttpGet("GetRequestsCountByCategoryId")]
+        public IActionResult GetRequestCountByCategoryId(short? categoryid)
         {
-            var result = _requestService.GetAllRequestByStatusId(statusid);
+            var result = _requestService.GetRequestsCountByCategoryId(categoryid);
             if (result.Success)
             {
                 return Ok(result);
             }
             return BadRequest(result);
+        }
+
+        [HttpGet("ReportGetByRequestId")]
+        public IActionResult ReportGetByRequestId(int requestid)
+        {
+            return Ok();
         }
 
         [HttpPost("Add")]

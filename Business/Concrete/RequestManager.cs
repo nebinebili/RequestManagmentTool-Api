@@ -22,7 +22,7 @@ namespace Business.Concrete
         private readonly IUnitofWork _unitofWork;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
+        private List<Request> _requests = new List<Request>();
 
 
         public RequestManager(IUnitofWork unitofWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
@@ -30,87 +30,97 @@ namespace Business.Concrete
             _unitofWork = unitofWork;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
-
         }
 
         public IResult Add(CreateRequestDto createRequestDto)
         {
             int userid = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
 
-            if(_unitofWork.CategoryUser.GetAll(c=>c.UserId==userid && c.CreatePermisson==true && c.CategoryId==createRequestDto.CategoryId).SingleOrDefault() == null)
+            if (_unitofWork.CategoryUser.GetAll(c => c.UserId == userid && c.CreatePermisson == true && c.CategoryId == createRequestDto.CategoryId).SingleOrDefault() == null)
             {
                 return new ErrorResult(Messages.NotPermissonCategory);
             }
             var request = _mapper.Map<Request>(createRequestDto);
             request.SenderId = userid;
-            
+
             _unitofWork.Request.Add(request);
             _unitofWork.Complete();
             return new SuccessResult(Messages.SuccessfullyCreated);
         }
 
-        public IDataResult<List<RequestDto>> GetAllRequestByCategoryId(short categoryid)
+        public IDataResult<List<RequestDto>> GetAllRequestByCategoryId(short? categoryid, short? statusid)
+        {
+            int id = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
+            if (categoryid == null)
+            {
+                _requests = (statusid == null) ? _unitofWork.Request.GetAllRequest(id) : _unitofWork.Request.GetAllRequest(id).Where(r => r.StatusId == statusid).ToList();
+
+                var data = _mapper.Map<List<RequestDto>>(_requests);
+
+                return new SuccessDataResult<List<RequestDto>>(data, Messages.SuccessfullyListed);
+            }
+            else
+            {
+                _requests = (statusid == null) ? _unitofWork.Request.GetAllRequest(id).Where(r => r.CategoryId == categoryid).ToList() : _unitofWork.Request.GetAllRequest(id).Where(r => r.CategoryId == categoryid && r.StatusId == statusid).ToList();
+
+                var data = _mapper.Map<List<RequestDto>>(_requests);
+
+                return new SuccessDataResult<List<RequestDto>>(data, Messages.SuccessfullyListed);
+            }
+        }
+
+        public IDataResult<List<RequestDto>> GetAllMyRequest(short? statusid)
         {
             int id = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
 
 
-            var requestlist = _unitofWork.Request.GetAllRequest(id).Where(r => r.CategoryId == categoryid).ToList();
+            _requests = (statusid == null) ? _unitofWork.Request.GetAllMyRequest(id) : _unitofWork.Request.GetAllMyRequest(id).Where(r => r.StatusId == statusid).ToList();
 
-            var data = _mapper.Map<List<RequestDto>>(requestlist);
+            var data = _mapper.Map<List<RequestDto>>(_requests);
 
             return new SuccessDataResult<List<RequestDto>>(data, Messages.SuccessfullyListed);
         }
 
-        public IDataResult<List<RequestDto>> GetAllRequestByStatusId(short statusid)
+        public IDataResult<List<RequestCountByStatusDto>> GetRequestsCountByCategoryId(short? categoryid)
         {
-            int id = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+            if (categoryid == null)
+            {
+                var ReqCountByStatus = GetAllRequestByCategoryId(null, null).Data.GroupBy(r => new { r.StatusId, r.StatusName }).Select(g => new RequestCountByStatusDto
+                {
+                    Count = g.Count(),
+                    Name = g.Key.StatusName
+                }).ToList();
 
+                ReqCountByStatus.Add(new RequestCountByStatusDto { Name = "Hamisi", Count = ReqCountByStatus.Sum(r => r.Count) });
 
-            var requestlist = _unitofWork.Request.GetAllRequest(id).Where(r => r.StatusId == statusid).ToList();
+                return new SuccessDataResult<List<RequestCountByStatusDto>>(ReqCountByStatus, Messages.SuccessfullyListed);
+            }
+            else
+            {
+                var ReqCountByStatus = GetAllRequestByCategoryId(categoryid, null).Data.GroupBy(r => new { r.StatusId, r.StatusName }).Select(g => new RequestCountByStatusDto
+                {
+                    Count = g.Count(),
+                    Name = g.Key.StatusName
+                }).ToList();
 
-            var data = _mapper.Map<List<RequestDto>>(requestlist);
+                ReqCountByStatus.Add(new RequestCountByStatusDto { Name = "Hamisi", Count = ReqCountByStatus.Sum(r => r.Count) });
 
-            return new SuccessDataResult<List<RequestDto>>(data, Messages.SuccessfullyListed);
+                return new SuccessDataResult<List<RequestCountByStatusDto>>(ReqCountByStatus, Messages.SuccessfullyListed);
+            }
         }
 
-
-        public IDataResult<List<RequestDto>> GetAllExecutableRequest()
+        public IDataResult<List<RequestCountByStatusDto>> GetMyRequestsCount()
         {
-            int id = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+            var ReqCountByStatus = GetAllMyRequest(null).Data.GroupBy(r => new { r.StatusId, r.StatusName}).Select(g => new RequestCountByStatusDto
+            {
+                Count = g.Count(),
+                Name = g.Key.StatusName
+            }).ToList();
 
+            ReqCountByStatus.Add(new RequestCountByStatusDto { Name="Hamisi",Count= ReqCountByStatus.Sum(r => r.Count) });
 
-            var requestlist = _unitofWork.Request.GetAllExecutableRequest(id);
-
-
-            var data = _mapper.Map<List<RequestDto>>(requestlist);
-
-            return new SuccessDataResult<List<RequestDto>>(data, Messages.SuccessfullyListed);
-        }
-
-        public IDataResult<List<RequestDto>> GetAllMyRequest()
-        {
-            int id = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
-
-
-            var requestlist = _unitofWork.Request.GetAllMyRequest(id);
-
-
-            var data = _mapper.Map<List<RequestDto>>(requestlist);
-
-            return new SuccessDataResult<List<RequestDto>>(data, Messages.SuccessfullyListed);
-        }
-
-        public IDataResult<List<RequestDto>> GetAllRequest()
-        {
-            int id = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
-
-
-            var requestlist = _unitofWork.Request.GetAllRequest(id);
-
-
-            var data = _mapper.Map<List<RequestDto>>(requestlist);
-
-            return new SuccessDataResult<List<RequestDto>>(data, Messages.SuccessfullyListed);
+            return new SuccessDataResult<List<RequestCountByStatusDto>>(ReqCountByStatus, Messages.SuccessfullyListed);
         }
     }
 }

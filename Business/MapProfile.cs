@@ -20,6 +20,7 @@ namespace Business
                 ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title)).
                 ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date)).
                 ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.Status.Name)).
+                ForMember(dest => dest.StatusId, opt => opt.MapFrom(src => src.Status.Id)).
                 ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name)).
                 ForMember(dest => dest.ExecutorName, opt => opt.MapFrom(src => src.Executor.UserName)).
                 ForMember(dest => dest.SenderName, opt => opt.MapFrom(src => src.Sender.UserName));
