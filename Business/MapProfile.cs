@@ -15,6 +15,7 @@ namespace Business
         public MapProfile()
         {
             CreateMap<SuccessDataResult<IQueryable<Request>>, SuccessDataResult<List<RequestDto>>>();
+            CreateMap<SuccessDataResult<List<Comment>>, SuccessDataResult<List<CommentDto>>>();
             CreateMap<Request, RequestDto>().
                 ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Text)).
                 ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title)).
@@ -41,6 +42,23 @@ namespace Business
                 ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title)).
                 ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Text)).
                 ForMember(dest => dest.PriorityId, opt => opt.MapFrom(src => src.PriorityId)).ReverseMap();
+
+
+            CreateMap<Request, ReportOfRequestDto>().
+                ForMember(dest => dest.UserFullName, opt => opt.MapFrom(src => src.Sender.FirstName + " " + src.Sender.LastName)).
+                ForMember(dest => dest.Department, opt => opt.MapFrom(src => src.Sender.Department)).
+                ForMember(dest => dest.RequestType, opt => opt.MapFrom(src => src.RequestType.Name)).
+                ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Text)).
+                ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.Sender.Position)).
+                ForMember(dest => dest.Priority, opt => opt.MapFrom(src => src.Priority.Name)).
+                ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Name)).
+                ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date));
+
+            CreateMap<Comment, CommentDto>().
+                ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Text)).
+                ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date)).
+                ForMember(dest => dest.UserFullName, opt => opt.MapFrom(src => src.User.FirstName + " " + src.User.LastName)).
+                ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.User.Position));
 
         }
     }

@@ -122,5 +122,25 @@ namespace Business.Concrete
 
             return new SuccessDataResult<List<RequestCountByStatusDto>>(ReqCountByStatus, Messages.SuccessfullyListed);
         }
+
+
+        public IDataResult<ReportOfRequestDto> GetReportOfRequestDto(int requestid)
+        {
+            // Daxil olan userin Bu requestId sorgusu var ya yox yoxlamaq
+
+            var request = _unitofWork.Request.GetAll(r => r.Id == requestid)
+                 .Include(r => r.Sender)
+                 .Include(r => r.Priority)
+                 .Include(r=>r.Status)
+                 .Include(r => r.RequestType).FirstOrDefault();
+
+
+            var lastComment = _unitofWork.Comment.GetAll(c => c.RequestId == requestid).Include(c=>c.User).ToList().Last();
+            var reportOfRequestDto = _mapper.Map<ReportOfRequestDto>(request);
+            var reportOfCommentDto = _mapper.Map<CommentDto>(lastComment);
+            reportOfRequestDto.LastComment = reportOfCommentDto;
+
+            return new SuccessDataResult<ReportOfRequestDto>(reportOfRequestDto, Messages.SuccessfullyListed);
+        }
     }
 }

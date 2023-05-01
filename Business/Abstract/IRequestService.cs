@@ -15,7 +15,8 @@ namespace Business.Abstract
         IDataResult<List<RequestDto>> GetAllMyRequest(short? statusid);
         IDataResult<List<RequestDto>> GetAllRequestByCategoryId(short? categoryid, short? statusid);  
         IDataResult<List<RequestCountByStatusDto>> GetMyRequestsCount();
-        IDataResult<List<RequestCountByStatusDto>> GetRequestsCountByCategoryId(short? categoryid);  
+        IDataResult<List<RequestCountByStatusDto>> GetRequestsCountByCategoryId(short? categoryid);
+        IDataResult<ReportOfRequestDto> GetReportOfRequestDto(int requestid);
         IResult Add(CreateRequestDto  createRequestDto);
     }
 }

@@ -17,6 +17,7 @@ namespace DataAccess.Abstract
         ICategoryDal Category { get; }
 
         ICategoryUserDal CategoryUser { get; }
+        ICommentDal Comment { get; }
         int Complete();
     }
 }

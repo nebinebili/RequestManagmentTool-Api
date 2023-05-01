@@ -65,10 +65,15 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("ReportGetByRequestId")]
-        public IActionResult ReportGetByRequestId(int requestid)
+        [HttpGet("GetReportOfRequest")]
+        public IActionResult GetReportOfRequest(int requestid)
         {
-            return Ok();
+            var result = _requestService.GetReportOfRequestDto(requestid);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
 
         [HttpPost("Add")]

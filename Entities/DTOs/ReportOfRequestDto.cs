@@ -16,7 +16,9 @@ namespace Entities.DTOs
         public string RequestType { get; set; }
         public string Priority { get; set; }
         public string Text { get; set; }
+        public string Status { get; set; }
         public DateTime Date { get; set; }
+        public CommentDto LastComment { get; set; }
 
     }
 }
