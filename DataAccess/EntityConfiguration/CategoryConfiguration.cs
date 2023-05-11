@@ -13,7 +13,8 @@ namespace DataAccess.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.Property(u => u.Name).HasMaxLength(100);
+            builder.Property(c => c.Name).HasMaxLength(100);
+            builder.Property(c=>c.Id).ValueGeneratedOnAdd();
         }
     }
 }

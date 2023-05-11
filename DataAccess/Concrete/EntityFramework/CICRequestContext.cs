@@ -10,16 +10,16 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class CICRequestContext:DbContext
+    public class CICRequestContext : DbContext
     {
         public CICRequestContext(DbContextOptions<CICRequestContext> contextOptions) : base(contextOptions)
         {
-            
+
         }
 
         public CICRequestContext()
         {
-            
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -30,13 +30,12 @@ namespace DataAccess.Concrete.EntityFramework
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new CommentConfiguration());
 
-            modelBuilder.Entity<Request>().HasOne(q=>q.Executor).WithMany(e=>e.ExecutorRequests).HasForeignKey(q=>q.ExecutorId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Request>().HasOne(q=>q.Sender).WithMany(e=>e.SenderRequests).HasForeignKey(q=>q.SenderId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Request>().HasOne(r => r.Executor).WithMany(e => e.ExecutorRequests).HasForeignKey(r => r.ExecutorId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Request>().HasOne(r => r.Sender).WithMany(e => e.SenderRequests).HasForeignKey(r => r.SenderId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Request>().HasOne(r => r.RequestInfo).WithOne(e => e.Request).HasForeignKey<Request>(r => r.RequestInfoId);
 
-            
+            //SeedData.Data(modelBuilder);
         }
-
-
 
         public DbSet<User> Users { get; set; }
         public DbSet<Status> Statuses { get; set; }

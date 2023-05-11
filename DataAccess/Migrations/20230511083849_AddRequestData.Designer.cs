@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(CICRequestContext))]
-    [Migration("20230407083340_Initial")]
-    partial class Initial
+    [Migration("20230511083849_AddRequestData")]
+    partial class AddRequestData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,6 +40,48 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (short)1,
+                            Name = "3E-Agis"
+                        },
+                        new
+                        {
+                            Id = (short)2,
+                            Name = "3E dəstək"
+                        },
+                        new
+                        {
+                            Id = (short)3,
+                            Name = "Call Center"
+                        },
+                        new
+                        {
+                            Id = (short)4,
+                            Name = "azkob.az"
+                        },
+                        new
+                        {
+                            Id = (short)5,
+                            Name = "cic web site"
+                        },
+                        new
+                        {
+                            Id = (short)6,
+                            Name = "Azeriqaz sms"
+                        },
+                        new
+                        {
+                            Id = (short)7,
+                            Name = "ailem.socar.az"
+                        },
+                        new
+                        {
+                            Id = (short)8,
+                            Name = "Asan web service"
+                        });
                 });
 
             modelBuilder.Entity("Entities.Concrete.CategoryUser", b =>
@@ -101,6 +143,45 @@ namespace DataAccess.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.Contact", b =>
+                {
+                    b.Property<short>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Contact");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (short)1,
+                            Name = "Email"
+                        },
+                        new
+                        {
+                            Id = (short)2,
+                            Name = "Phone"
+                        },
+                        new
+                        {
+                            Id = (short)3,
+                            Name = "SOLMAN"
+                        },
+                        new
+                        {
+                            Id = (short)4,
+                            Name = "Request"
+                        });
+                });
+
             modelBuilder.Entity("Entities.Concrete.History", b =>
                 {
                     b.Property<int>("Id")
@@ -156,6 +237,23 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Priorities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (short)1,
+                            Name = "Low"
+                        },
+                        new
+                        {
+                            Id = (short)2,
+                            Name = "Medium"
+                        },
+                        new
+                        {
+                            Id = (short)3,
+                            Name = "Hard"
+                        });
                 });
 
             modelBuilder.Entity("Entities.Concrete.Request", b =>
@@ -170,20 +268,21 @@ namespace DataAccess.Migrations
                         .HasColumnType("smallint");
 
                     b.Property<DateTime>("Date")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 4, 7, 12, 33, 40, 258, DateTimeKind.Local).AddTicks(7599));
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("ExecutorId")
+                    b.Property<int?>("ExecutorId")
                         .HasColumnType("int");
 
                     b.Property<short>("PriorityId")
                         .HasColumnType("smallint");
 
+                    b.Property<int?>("RequestInfoId")
+                        .HasColumnType("int");
+
                     b.Property<short>("RequestTypeId")
                         .HasColumnType("smallint");
 
-                    b.Property<int?>("SenderId")
+                    b.Property<int>("SenderId")
                         .HasColumnType("int");
 
                     b.Property<short>("StatusId")
@@ -208,6 +307,10 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("PriorityId");
 
+                    b.HasIndex("RequestInfoId")
+                        .IsUnique()
+                        .HasFilter("[RequestInfoId] IS NOT NULL");
+
                     b.HasIndex("RequestTypeId");
 
                     b.HasIndex("SenderId");
@@ -215,6 +318,127 @@ namespace DataAccess.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("Requests");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = (short)3,
+                            Date = new DateTime(2023, 5, 11, 12, 38, 49, 80, DateTimeKind.Local).AddTicks(7716),
+                            PriorityId = (short)1,
+                            RequestTypeId = (short)5,
+                            SenderId = 1,
+                            StatusId = (short)2,
+                            Text = "email test edilme isi",
+                            Title = "#email Test"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryId = (short)2,
+                            Date = new DateTime(2023, 5, 11, 12, 38, 49, 80, DateTimeKind.Local).AddTicks(7733),
+                            ExecutorId = 1,
+                            PriorityId = (short)3,
+                            RequestTypeId = (short)2,
+                            SenderId = 3,
+                            StatusId = (short)1,
+                            Text = "odenislerin silinmesi emeliyyati",
+                            Title = "Odenislerin silinmesi"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryId = (short)4,
+                            Date = new DateTime(2023, 5, 11, 12, 38, 49, 80, DateTimeKind.Local).AddTicks(7735),
+                            ExecutorId = 2,
+                            PriorityId = (short)2,
+                            RequestTypeId = (short)5,
+                            SenderId = 3,
+                            StatusId = (short)1,
+                            Text = "odenislerin arasdirilimasi emeliyyati",
+                            Title = "Odenislerin arasdirilimasi"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryId = (short)5,
+                            Date = new DateTime(2023, 5, 11, 12, 38, 49, 80, DateTimeKind.Local).AddTicks(7737),
+                            PriorityId = (short)2,
+                            RequestTypeId = (short)7,
+                            SenderId = 2,
+                            StatusId = (short)3,
+                            Text = "email egov emeliyyati",
+                            Title = "email egov"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryId = (short)4,
+                            Date = new DateTime(2023, 5, 11, 12, 38, 49, 80, DateTimeKind.Local).AddTicks(7738),
+                            ExecutorId = 3,
+                            PriorityId = (short)2,
+                            RequestTypeId = (short)3,
+                            SenderId = 1,
+                            StatusId = (short)3,
+                            Text = "muqavile emeliyyati",
+                            Title = "muqavile"
+                        });
+                });
+
+            modelBuilder.Entity("Entities.Concrete.RequestInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<short?>("ContactId")
+                        .HasColumnType("smallint");
+
+                    b.Property<double?>("ExecutionTime")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("PlannedExecutionTime")
+                        .HasColumnType("float");
+
+                    b.Property<short?>("PriorityId")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("RequestSender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<short?>("RequestTypeId")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Result")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RootCause")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("Rountine")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SolmanRequestNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Solution")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<short?>("TypeId")
+                        .HasColumnType("smallint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContactId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("RequestInfo");
                 });
 
             modelBuilder.Entity("Entities.Concrete.RequestType", b =>
@@ -233,6 +457,53 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RequestTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (short)1,
+                            Name = "App Change"
+                        },
+                        new
+                        {
+                            Id = (short)2,
+                            Name = "App Issue"
+                        },
+                        new
+                        {
+                            Id = (short)3,
+                            Name = "App New Requirement"
+                        },
+                        new
+                        {
+                            Id = (short)4,
+                            Name = "Change the Report"
+                        },
+                        new
+                        {
+                            Id = (short)5,
+                            Name = "Create Custom Report"
+                        },
+                        new
+                        {
+                            Id = (short)6,
+                            Name = "Create New Report"
+                        },
+                        new
+                        {
+                            Id = (short)7,
+                            Name = "Incident"
+                        },
+                        new
+                        {
+                            Id = (short)8,
+                            Name = "Master Data Change"
+                        },
+                        new
+                        {
+                            Id = (short)9,
+                            Name = "Service Request"
+                        });
                 });
 
             modelBuilder.Entity("Entities.Concrete.Status", b =>
@@ -251,6 +522,67 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Statuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (short)1,
+                            Name = "Açıq"
+                        },
+                        new
+                        {
+                            Id = (short)2,
+                            Name = "İcrada"
+                        },
+                        new
+                        {
+                            Id = (short)3,
+                            Name = "Qapalı"
+                        },
+                        new
+                        {
+                            Id = (short)4,
+                            Name = "Təsdiqləndi"
+                        },
+                        new
+                        {
+                            Id = (short)5,
+                            Name = "İmtina edildi"
+                        },
+                        new
+                        {
+                            Id = (short)6,
+                            Name = "Gözləmədə"
+                        });
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Type", b =>
+                {
+                    b.Property<short>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Type");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = (short)1,
+                            Name = "Application Maintenance"
+                        },
+                        new
+                        {
+                            Id = (short)2,
+                            Name = "Application Development"
+                        });
                 });
 
             modelBuilder.Entity("Entities.Concrete.User", b =>
@@ -262,9 +594,7 @@ namespace DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 4, 7, 12, 33, 40, 258, DateTimeKind.Local).AddTicks(7426));
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Department")
                         .IsRequired()
@@ -420,6 +750,10 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Entities.Concrete.RequestInfo", "RequestInfo")
+                        .WithOne("Request")
+                        .HasForeignKey("Entities.Concrete.Request", "RequestInfoId");
+
                     b.HasOne("Entities.Concrete.RequestType", "RequestType")
                         .WithMany("Requests")
                         .HasForeignKey("RequestTypeId")
@@ -443,11 +777,28 @@ namespace DataAccess.Migrations
 
                     b.Navigation("Priority");
 
+                    b.Navigation("RequestInfo");
+
                     b.Navigation("RequestType");
 
                     b.Navigation("Sender");
 
                     b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.RequestInfo", b =>
+                {
+                    b.HasOne("Entities.Concrete.Contact", "Contact")
+                        .WithMany("RequestInfos")
+                        .HasForeignKey("ContactId");
+
+                    b.HasOne("Entities.Concrete.Type", "Type")
+                        .WithMany("RequestInfos")
+                        .HasForeignKey("TypeId");
+
+                    b.Navigation("Contact");
+
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("Entities.Concrete.UserOperationClaim", b =>
@@ -476,6 +827,11 @@ namespace DataAccess.Migrations
                     b.Navigation("Requests");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.Contact", b =>
+                {
+                    b.Navigation("RequestInfos");
+                });
+
             modelBuilder.Entity("Entities.Concrete.OperationClaim", b =>
                 {
                     b.Navigation("UserOperationClaims");
@@ -491,6 +847,11 @@ namespace DataAccess.Migrations
                     b.Navigation("Comments");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.RequestInfo", b =>
+                {
+                    b.Navigation("Request");
+                });
+
             modelBuilder.Entity("Entities.Concrete.RequestType", b =>
                 {
                     b.Navigation("Requests");
@@ -499,6 +860,11 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Entities.Concrete.Status", b =>
                 {
                     b.Navigation("Requests");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Type", b =>
+                {
+                    b.Navigation("RequestInfos");
                 });
 
             modelBuilder.Entity("Entities.Concrete.User", b =>

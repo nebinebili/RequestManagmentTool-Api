@@ -25,9 +25,6 @@ namespace DataAccess.EntityConfiguration
             builder.Property(u => u.PasswordSalt).HasColumnType("varbinary").HasMaxLength(500);
             builder.Property(u=>u.NotificationPermission).HasDefaultValue(true).IsRequired();
             builder.Property(u=>u.IsActive).HasDefaultValue(true);
-            builder.Property(u=>u.CreatedDate).HasDefaultValue(DateTime.Now);
-
-
         }
     }
 }

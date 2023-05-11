@@ -13,7 +13,7 @@ namespace DataAccess.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<Comment> builder)
         {
-            builder.Property(u => u.Date).HasDefaultValue(DateTime.Now);
+
         }
     }
 }

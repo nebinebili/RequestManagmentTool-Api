@@ -13,7 +13,7 @@ namespace Entities.Concrete
         public int Id { get; set; }
         public string Title { get; set; }
         public string Text { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; }=DateTime.Now;
 
         
         public short CategoryId { get; set; }
@@ -22,6 +22,7 @@ namespace Entities.Concrete
         public short RequestTypeId { get; set; }
         public int SenderId { get; set; }
         public int? ExecutorId { get; set; }
+        public int? RequestInfoId { get; set; }
 
         public Category Category { get; set; }
         public Status Status { get; set; }
@@ -29,6 +30,7 @@ namespace Entities.Concrete
         public RequestType RequestType { get; set; }
         public User Executor { get; set; }
         public User Sender { get; set; }
+        public RequestInfo? RequestInfo { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
 

@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\source\\repos\\CICRequestApi\\Entities\\Entities.csproj": {}
+    "C:\\Users\\nbili\\source\\repos\\RequestManagmentTool-Api\\Entities\\Entities.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\source\\repos\\CICRequestApi\\Entities\\Entities.csproj": {
+    "C:\\Users\\nbili\\source\\repos\\RequestManagmentTool-Api\\Entities\\Entities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\source\\repos\\CICRequestApi\\Entities\\Entities.csproj",
+        "projectUniqueName": "C:\\Users\\nbili\\source\\repos\\RequestManagmentTool-Api\\Entities\\Entities.csproj",
         "projectName": "Entities",
-        "projectPath": "C:\\Users\\Admin\\source\\repos\\CICRequestApi\\Entities\\Entities.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\source\\repos\\CICRequestApi\\Entities\\obj\\",
+        "projectPath": "C:\\Users\\nbili\\source\\repos\\RequestManagmentTool-Api\\Entities\\Entities.csproj",
+        "packagesPath": "C:\\Users\\nbili\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\nbili\\source\\repos\\RequestManagmentTool-Api\\Entities\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\nbili\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

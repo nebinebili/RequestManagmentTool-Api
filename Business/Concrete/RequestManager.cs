@@ -48,13 +48,15 @@ namespace Business.Concrete
             return new SuccessResult(Messages.SuccessfullyCreated);
         }
 
-        public IDataResult<List<RequestDto>> GetAllRequestByCategoryId(short? categoryid, short? statusid)
+        public IDataResult<List<RequestDto>> GetAllRequestByCategoryId(short? categoryid, short? statusid, int pagenumber, int pagesize)
         {
             int id = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
 
             if (categoryid == null)
             {
-                _requests = (statusid == null) ? _unitofWork.Request.GetAllRequest(id) : _unitofWork.Request.GetAllRequest(id).Where(r => r.StatusId == statusid).ToList();
+                _requests = (statusid == null) 
+                    ? _unitofWork.Request.GetAllRequest(id).Skip((pagenumber - 1) * pagesize).OrderByDescending(r => r.Date).Take(pagesize).ToList()
+                    : _unitofWork.Request.GetAllRequest(id).Where(r => r.StatusId == statusid).Skip((pagenumber - 1) * pagesize).OrderByDescending(r => r.Date).Take(pagesize).ToList();
 
                 var data = _mapper.Map<List<RequestDto>>(_requests);
 
@@ -62,7 +64,9 @@ namespace Business.Concrete
             }
             else
             {
-                _requests = (statusid == null) ? _unitofWork.Request.GetAllRequest(id).Where(r => r.CategoryId == categoryid).ToList() : _unitofWork.Request.GetAllRequest(id).Where(r => r.CategoryId == categoryid && r.StatusId == statusid).ToList();
+                _requests = (statusid == null)
+                    ? _unitofWork.Request.GetAllRequest(id).Where(r => r.CategoryId == categoryid).Skip((pagenumber - 1) * pagesize).OrderByDescending(r => r.Date).Take(pagesize).ToList()
+                    : _unitofWork.Request.GetAllRequest(id).Where(r => r.CategoryId == categoryid && r.StatusId == statusid).Skip((pagenumber - 1) * pagesize).OrderByDescending(r => r.Date).Take(pagesize).ToList();
 
                 var data = _mapper.Map<List<RequestDto>>(_requests);
 
@@ -70,12 +74,14 @@ namespace Business.Concrete
             }
         }
 
-        public IDataResult<List<RequestDto>> GetAllMyRequest(short? statusid)
+        public IDataResult<List<RequestDto>> GetAllMyRequest(short? statusid, int pagenumber, int pagesize)
         {
             int id = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
 
 
-            _requests = (statusid == null) ? _unitofWork.Request.GetAllMyRequest(id) : _unitofWork.Request.GetAllMyRequest(id).Where(r => r.StatusId == statusid).ToList();
+            _requests = (statusid == null)
+                ? _unitofWork.Request.GetAllMyRequest(id).Skip((pagenumber - 1) * pagesize).OrderByDescending(r => r.Date).Take(pagesize).ToList()
+                : _unitofWork.Request.GetAllMyRequest(id).Where(r => r.StatusId == statusid).Skip((pagenumber - 1) * pagesize).OrderByDescending(r => r.Date).Take(pagesize).ToList();
 
             var data = _mapper.Map<List<RequestDto>>(_requests);
 
@@ -84,12 +90,14 @@ namespace Business.Concrete
 
         public IDataResult<List<RequestCountByStatusDto>> GetRequestsCountByCategoryId(short? categoryid)
         {
+            int id = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
             if (categoryid == null)
             {
-                var ReqCountByStatus = GetAllRequestByCategoryId(null, null).Data.GroupBy(r => new { r.StatusId, r.StatusName }).Select(g => new RequestCountByStatusDto
+                var ReqCountByStatus = _unitofWork.Request.GetAllRequest(id).GroupBy(r => new { r.StatusId, r.Status.Name }).Select(g => new RequestCountByStatusDto
                 {
                     Count = g.Count(),
-                    Name = g.Key.StatusName
+                    Name = g.Key.Name
                 }).ToList();
 
                 ReqCountByStatus.Add(new RequestCountByStatusDto { Name = "Hamisi", Count = ReqCountByStatus.Sum(r => r.Count) });
@@ -98,13 +106,11 @@ namespace Business.Concrete
             }
             else
             {
-                var ReqCountByStatus = GetAllRequestByCategoryId(categoryid, null).Data.GroupBy(r => new { r.StatusId, r.StatusName }).Select(g => new RequestCountByStatusDto
+                var ReqCountByStatus = _unitofWork.Request.GetAllRequest(id).Where(r => r.CategoryId == categoryid).GroupBy(r => new { r.StatusId, r.Status.Name }).Select(g => new RequestCountByStatusDto
                 {
                     Count = g.Count(),
-                    Name = g.Key.StatusName
+                    Name = g.Key.Name
                 }).ToList();
-
-                ReqCountByStatus.Add(new RequestCountByStatusDto { Name = "Hamisi", Count = ReqCountByStatus.Sum(r => r.Count) });
 
                 return new SuccessDataResult<List<RequestCountByStatusDto>>(ReqCountByStatus, Messages.SuccessfullyListed);
             }
@@ -112,10 +118,12 @@ namespace Business.Concrete
 
         public IDataResult<List<RequestCountByStatusDto>> GetMyRequestsCount()
         {
-            var ReqCountByStatus = GetAllMyRequest(null).Data.GroupBy(r => new { r.StatusId, r.StatusName}).Select(g => new RequestCountByStatusDto
+            int id = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+
+            var ReqCountByStatus = _unitofWork.Request.GetAllMyRequest(id).GroupBy(r => new { r.StatusId, r.Status.Name}).Select(g => new RequestCountByStatusDto
             {
                 Count = g.Count(),
-                Name = g.Key.StatusName
+                Name = g.Key.Name
             }).ToList();
 
             ReqCountByStatus.Add(new RequestCountByStatusDto { Name="Hamisi",Count= ReqCountByStatus.Sum(r => r.Count) });
@@ -135,10 +143,12 @@ namespace Business.Concrete
                  .Include(r => r.RequestType).FirstOrDefault();
 
 
-            var lastComment = _unitofWork.Comment.GetAll(c => c.RequestId == requestid).Include(c=>c.User).ToList().Last();
+            var lastComment = (_unitofWork.Comment.GetAll(c => c.RequestId == requestid).Count()!=0)
+                ? _unitofWork.Comment.GetAll(c => c.RequestId == requestid).Include(c => c.User).ToList().Last()
+                : null;
             var reportOfRequestDto = _mapper.Map<ReportOfRequestDto>(request);
-            var reportOfCommentDto = _mapper.Map<CommentDto>(lastComment);
-            reportOfRequestDto.LastComment = reportOfCommentDto;
+            var reportOfLastCommentDto = _mapper.Map<CommentDto>(lastComment);
+            reportOfRequestDto.LastComment = reportOfLastCommentDto;
 
             return new SuccessDataResult<ReportOfRequestDto>(reportOfRequestDto, Messages.SuccessfullyListed);
         }

@@ -14,7 +14,7 @@ namespace Entities.Concrete
        public string LastName { get; set; }
        public string UserName { get; set; }
        public byte[] PasswordSalt { get; set; }
-       public byte[] PasswordHash { get; set; }
+       public byte[] PasswordHash { get; set; } 
        public string Department { get; set; }
        public string Position { get; set; }
        public string InnerPhone { get; set; }
@@ -22,7 +22,7 @@ namespace Entities.Concrete
        public string? ProfilPicture { get; set; }
        public bool NotificationPermission { get; set; }
        public bool IsActive { get; set; }
-       public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
 
         public ICollection<Request> SenderRequests { get; set; }
         public ICollection<Request> ExecutorRequests { get; set; }

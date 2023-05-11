@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DataAccess.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,6 +20,19 @@ namespace DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Contact",
+                columns: table => new
+                {
+                    Id = table.Column<short>(type: "smallint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contact", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -75,6 +88,19 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Type",
+                columns: table => new
+                {
+                    Id = table.Column<short>(type: "smallint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Type", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -92,11 +118,46 @@ namespace DataAccess.Migrations
                     ProfilPicture = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NotificationPermission = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 4, 7, 12, 33, 40, 258, DateTimeKind.Local).AddTicks(7426))
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RequestInfo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Result = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Solution = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExecutionTime = table.Column<double>(type: "float", nullable: true),
+                    PlannedExecutionTime = table.Column<double>(type: "float", nullable: true),
+                    TypeId = table.Column<short>(type: "smallint", nullable: true),
+                    RequestSender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SolmanRequestNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactId = table.Column<short>(type: "smallint", nullable: true),
+                    Rountine = table.Column<bool>(type: "bit", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RootCause = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PriorityId = table.Column<short>(type: "smallint", nullable: true),
+                    RequestTypeId = table.Column<short>(type: "smallint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RequestInfo", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RequestInfo_Contact_ContactId",
+                        column: x => x.ContactId,
+                        principalTable: "Contact",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_RequestInfo_Type_TypeId",
+                        column: x => x.TypeId,
+                        principalTable: "Type",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -148,61 +209,6 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Requests",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 4, 7, 12, 33, 40, 258, DateTimeKind.Local).AddTicks(7599)),
-                    CategoryId = table.Column<short>(type: "smallint", nullable: false),
-                    StatusId = table.Column<short>(type: "smallint", nullable: false, defaultValue: (short)1),
-                    PriorityId = table.Column<short>(type: "smallint", nullable: false),
-                    RequestTypeId = table.Column<short>(type: "smallint", nullable: false),
-                    SenderId = table.Column<int>(type: "int", nullable: true),
-                    ExecutorId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Requests", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Requests_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Requests_Priorities_PriorityId",
-                        column: x => x.PriorityId,
-                        principalTable: "Priorities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Requests_RequestTypes_RequestTypeId",
-                        column: x => x.RequestTypeId,
-                        principalTable: "RequestTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Requests_Statuses_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "Statuses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Requests_Users_ExecutorId",
-                        column: x => x.ExecutorId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Requests_Users_SenderId",
-                        column: x => x.SenderId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserOperationClaims",
                 columns: table => new
                 {
@@ -226,6 +232,67 @@ namespace DataAccess.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Requests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CategoryId = table.Column<short>(type: "smallint", nullable: false),
+                    StatusId = table.Column<short>(type: "smallint", nullable: false, defaultValue: (short)1),
+                    PriorityId = table.Column<short>(type: "smallint", nullable: false),
+                    RequestTypeId = table.Column<short>(type: "smallint", nullable: false),
+                    SenderId = table.Column<int>(type: "int", nullable: false),
+                    ExecutorId = table.Column<int>(type: "int", nullable: true),
+                    RequestInfoId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Requests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Requests_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Requests_Priorities_PriorityId",
+                        column: x => x.PriorityId,
+                        principalTable: "Priorities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Requests_RequestInfo_RequestInfoId",
+                        column: x => x.RequestInfoId,
+                        principalTable: "RequestInfo",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Requests_RequestTypes_RequestTypeId",
+                        column: x => x.RequestTypeId,
+                        principalTable: "RequestTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Requests_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Requests_Users_ExecutorId",
+                        column: x => x.ExecutorId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Requests_Users_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -256,6 +323,80 @@ namespace DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { (short)1, "3E-Agis" },
+                    { (short)2, "3E dəstək" },
+                    { (short)3, "Call Center" },
+                    { (short)4, "azkob.az" },
+                    { (short)5, "cic web site" },
+                    { (short)6, "Azeriqaz sms" },
+                    { (short)7, "ailem.socar.az" },
+                    { (short)8, "Asan web service" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Contact",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { (short)1, "Email" },
+                    { (short)2, "Phone" },
+                    { (short)3, "SOLMAN" },
+                    { (short)4, "Request" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Priorities",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { (short)1, "Low" },
+                    { (short)2, "Medium" },
+                    { (short)3, "Hard" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "RequestTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { (short)1, "App Change" },
+                    { (short)2, "App Issue" },
+                    { (short)3, "App New Requirement" },
+                    { (short)4, "Change the Report" },
+                    { (short)5, "Create Custom Report" },
+                    { (short)6, "Create New Report" },
+                    { (short)7, "Incident" },
+                    { (short)8, "Master Data Change" },
+                    { (short)9, "Service Request" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Statuses",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { (short)1, "Açıq" },
+                    { (short)2, "İcrada" },
+                    { (short)3, "Qapalı" },
+                    { (short)4, "Təsdiqləndi" },
+                    { (short)5, "İmtina edildi" },
+                    { (short)6, "Gözləmədə" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Type",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { (short)1, "Application Maintenance" },
+                    { (short)2, "Application Development" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_CategoryUsers_CategoryId",
                 table: "CategoryUsers",
@@ -282,6 +423,16 @@ namespace DataAccess.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RequestInfo_ContactId",
+                table: "RequestInfo",
+                column: "ContactId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RequestInfo_TypeId",
+                table: "RequestInfo",
+                column: "TypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Requests_CategoryId",
                 table: "Requests",
                 column: "CategoryId");
@@ -295,6 +446,13 @@ namespace DataAccess.Migrations
                 name: "IX_Requests_PriorityId",
                 table: "Requests",
                 column: "PriorityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Requests_RequestInfoId",
+                table: "Requests",
+                column: "RequestInfoId",
+                unique: true,
+                filter: "[RequestInfoId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Requests_RequestTypeId",
@@ -349,6 +507,9 @@ namespace DataAccess.Migrations
                 name: "Priorities");
 
             migrationBuilder.DropTable(
+                name: "RequestInfo");
+
+            migrationBuilder.DropTable(
                 name: "RequestTypes");
 
             migrationBuilder.DropTable(
@@ -356,6 +517,12 @@ namespace DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Contact");
+
+            migrationBuilder.DropTable(
+                name: "Type");
         }
     }
 }

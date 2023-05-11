@@ -10,7 +10,7 @@ namespace Entities.Concrete
     public class History:IEntity
     {
         public int Id { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } = DateTime.Now;
         public int UserId { get; set; }
         public User User { get; set; }
     }

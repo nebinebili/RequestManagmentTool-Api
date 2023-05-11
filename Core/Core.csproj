@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Utilities\IoC\" />
+    <Compile Remove="Utilities\IoC\**" />
+    <EmbeddedResource Remove="Utilities\IoC\**" />
+    <None Remove="Utilities\IoC\**" />
   </ItemGroup>
 
   <ItemGroup>

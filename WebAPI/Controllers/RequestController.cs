@@ -22,9 +22,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("GetAllMyRequest")]
-        public IActionResult GetAllMyRequest(short? statusid)
+        public IActionResult GetAllMyRequest(short? statusid,int pagenumber,int pagesize)
         {
-            var result = _requestService.GetAllMyRequest(statusid);
+            var result = _requestService.GetAllMyRequest(statusid,pagenumber,pagesize);
             if (result.Success)
             {
                 return Ok(result);
@@ -44,9 +44,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("GetByCategoryId")]
-        public IActionResult GetByCategoryId(short? categoryid, short? statusid)
+        public IActionResult GetByCategoryId(short? categoryid, short? statusid, int pagenumber, int pagesize)
         {
-            var result = _requestService.GetAllRequestByCategoryId(categoryid,statusid);
+            var result = _requestService.GetAllRequestByCategoryId(categoryid,statusid, pagenumber, pagesize);
             if (result.Success)
             {
                 return Ok(result);

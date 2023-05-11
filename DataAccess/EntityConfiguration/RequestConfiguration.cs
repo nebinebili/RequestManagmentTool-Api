@@ -14,7 +14,6 @@ namespace DataAccess.EntityConfiguration
         public void Configure(EntityTypeBuilder<Request> builder)
         {
             builder.Property(u => u.Title).HasMaxLength(100);
-            builder.Property(u => u.Date).HasDefaultValue(DateTime.Now);
             builder.Property(u=>u.StatusId).HasDefaultValue(1);
         }
     }

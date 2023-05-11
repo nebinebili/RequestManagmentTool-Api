@@ -12,8 +12,8 @@ namespace Business.Abstract
 {
     public interface IRequestService
     {
-        IDataResult<List<RequestDto>> GetAllMyRequest(short? statusid);
-        IDataResult<List<RequestDto>> GetAllRequestByCategoryId(short? categoryid, short? statusid);  
+        IDataResult<List<RequestDto>> GetAllMyRequest(short? statusid,int pagenumber,int pagesize);
+        IDataResult<List<RequestDto>> GetAllRequestByCategoryId(short? categoryid, short? statusid, int pagenumber, int pagesize);  
         IDataResult<List<RequestCountByStatusDto>> GetMyRequestsCount();
         IDataResult<List<RequestCountByStatusDto>> GetRequestsCountByCategoryId(short? categoryid);
         IDataResult<ReportOfRequestDto> GetReportOfRequestDto(int requestid);

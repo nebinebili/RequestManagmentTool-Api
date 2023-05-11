@@ -41,7 +41,7 @@ namespace DataAccess.Concrete.EntityFramework
                          where cu.ExecutePermisson == true && cu.UserId == userId && r.SenderId != userId ||
                                cu.CreatePermisson == true && cu.UserId == userId && r.SenderId == userId
                          select r;
-            return result
+            return result 
                 .Include(r => r.Category)
                 .Include(r => r.Status)
                 .Include(r => r.Executor)
