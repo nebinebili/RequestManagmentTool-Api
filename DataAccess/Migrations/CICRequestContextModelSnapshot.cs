@@ -274,9 +274,6 @@ namespace DataAccess.Migrations
                     b.Property<short>("PriorityId")
                         .HasColumnType("smallint");
 
-                    b.Property<int?>("RequestInfoId")
-                        .HasColumnType("int");
-
                     b.Property<short>("RequestTypeId")
                         .HasColumnType("smallint");
 
@@ -305,10 +302,6 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("PriorityId");
 
-                    b.HasIndex("RequestInfoId")
-                        .IsUnique()
-                        .HasFilter("[RequestInfoId] IS NOT NULL");
-
                     b.HasIndex("RequestTypeId");
 
                     b.HasIndex("SenderId");
@@ -322,7 +315,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 1,
                             CategoryId = (short)3,
-                            Date = new DateTime(2023, 5, 11, 12, 38, 49, 80, DateTimeKind.Local).AddTicks(7716),
+                            Date = new DateTime(2023, 5, 13, 13, 2, 40, 219, DateTimeKind.Local).AddTicks(5347),
                             PriorityId = (short)1,
                             RequestTypeId = (short)5,
                             SenderId = 1,
@@ -334,7 +327,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 2,
                             CategoryId = (short)2,
-                            Date = new DateTime(2023, 5, 11, 12, 38, 49, 80, DateTimeKind.Local).AddTicks(7733),
+                            Date = new DateTime(2023, 5, 13, 13, 2, 40, 219, DateTimeKind.Local).AddTicks(5366),
                             ExecutorId = 1,
                             PriorityId = (short)3,
                             RequestTypeId = (short)2,
@@ -347,7 +340,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 3,
                             CategoryId = (short)4,
-                            Date = new DateTime(2023, 5, 11, 12, 38, 49, 80, DateTimeKind.Local).AddTicks(7735),
+                            Date = new DateTime(2023, 5, 13, 13, 2, 40, 219, DateTimeKind.Local).AddTicks(5368),
                             ExecutorId = 2,
                             PriorityId = (short)2,
                             RequestTypeId = (short)5,
@@ -360,7 +353,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 4,
                             CategoryId = (short)5,
-                            Date = new DateTime(2023, 5, 11, 12, 38, 49, 80, DateTimeKind.Local).AddTicks(7737),
+                            Date = new DateTime(2023, 5, 13, 13, 2, 40, 219, DateTimeKind.Local).AddTicks(5369),
                             PriorityId = (short)2,
                             RequestTypeId = (short)7,
                             SenderId = 2,
@@ -372,7 +365,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 5,
                             CategoryId = (short)4,
-                            Date = new DateTime(2023, 5, 11, 12, 38, 49, 80, DateTimeKind.Local).AddTicks(7738),
+                            Date = new DateTime(2023, 5, 13, 13, 2, 40, 219, DateTimeKind.Local).AddTicks(5370),
                             ExecutorId = 3,
                             PriorityId = (short)2,
                             RequestTypeId = (short)3,
@@ -403,14 +396,11 @@ namespace DataAccess.Migrations
                     b.Property<double?>("PlannedExecutionTime")
                         .HasColumnType("float");
 
-                    b.Property<short?>("PriorityId")
-                        .HasColumnType("smallint");
+                    b.Property<int?>("RequestId")
+                        .HasColumnType("int");
 
                     b.Property<string>("RequestSender")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<short?>("RequestTypeId")
-                        .HasColumnType("smallint");
 
                     b.Property<string>("Result")
                         .HasColumnType("nvarchar(max)");
@@ -433,6 +423,10 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ContactId");
+
+                    b.HasIndex("RequestId")
+                        .IsUnique()
+                        .HasFilter("[RequestId] IS NOT NULL");
 
                     b.HasIndex("TypeId");
 
@@ -748,10 +742,6 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Concrete.RequestInfo", "RequestInfo")
-                        .WithOne("Request")
-                        .HasForeignKey("Entities.Concrete.Request", "RequestInfoId");
-
                     b.HasOne("Entities.Concrete.RequestType", "RequestType")
                         .WithMany("Requests")
                         .HasForeignKey("RequestTypeId")
@@ -775,8 +765,6 @@ namespace DataAccess.Migrations
 
                     b.Navigation("Priority");
 
-                    b.Navigation("RequestInfo");
-
                     b.Navigation("RequestType");
 
                     b.Navigation("Sender");
@@ -790,11 +778,17 @@ namespace DataAccess.Migrations
                         .WithMany("RequestInfos")
                         .HasForeignKey("ContactId");
 
+                    b.HasOne("Entities.Concrete.Request", "Request")
+                        .WithOne("RequestInfo")
+                        .HasForeignKey("Entities.Concrete.RequestInfo", "RequestId");
+
                     b.HasOne("Entities.Concrete.Type", "Type")
                         .WithMany("RequestInfos")
                         .HasForeignKey("TypeId");
 
                     b.Navigation("Contact");
+
+                    b.Navigation("Request");
 
                     b.Navigation("Type");
                 });
@@ -843,11 +837,9 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Entities.Concrete.Request", b =>
                 {
                     b.Navigation("Comments");
-                });
 
-            modelBuilder.Entity("Entities.Concrete.RequestInfo", b =>
-                {
-                    b.Navigation("Request");
+                    b.Navigation("RequestInfo")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Entities.Concrete.RequestType", b =>

@@ -126,41 +126,6 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RequestInfo",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Result = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Solution = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ExecutionTime = table.Column<double>(type: "float", nullable: true),
-                    PlannedExecutionTime = table.Column<double>(type: "float", nullable: true),
-                    TypeId = table.Column<short>(type: "smallint", nullable: true),
-                    RequestSender = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SolmanRequestNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ContactId = table.Column<short>(type: "smallint", nullable: true),
-                    Rountine = table.Column<bool>(type: "bit", nullable: true),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RootCause = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PriorityId = table.Column<short>(type: "smallint", nullable: true),
-                    RequestTypeId = table.Column<short>(type: "smallint", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RequestInfo", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RequestInfo_Contact_ContactId",
-                        column: x => x.ContactId,
-                        principalTable: "Contact",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_RequestInfo_Type_TypeId",
-                        column: x => x.TypeId,
-                        principalTable: "Type",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CategoryUsers",
                 columns: table => new
                 {
@@ -209,6 +174,61 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Requests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CategoryId = table.Column<short>(type: "smallint", nullable: false),
+                    StatusId = table.Column<short>(type: "smallint", nullable: false, defaultValue: (short)1),
+                    PriorityId = table.Column<short>(type: "smallint", nullable: false),
+                    RequestTypeId = table.Column<short>(type: "smallint", nullable: false),
+                    SenderId = table.Column<int>(type: "int", nullable: false),
+                    ExecutorId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Requests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Requests_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Requests_Priorities_PriorityId",
+                        column: x => x.PriorityId,
+                        principalTable: "Priorities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Requests_RequestTypes_RequestTypeId",
+                        column: x => x.RequestTypeId,
+                        principalTable: "RequestTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Requests_Statuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Statuses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Requests_Users_ExecutorId",
+                        column: x => x.ExecutorId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Requests_Users_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserOperationClaims",
                 columns: table => new
                 {
@@ -232,67 +252,6 @@ namespace DataAccess.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Requests",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CategoryId = table.Column<short>(type: "smallint", nullable: false),
-                    StatusId = table.Column<short>(type: "smallint", nullable: false, defaultValue: (short)1),
-                    PriorityId = table.Column<short>(type: "smallint", nullable: false),
-                    RequestTypeId = table.Column<short>(type: "smallint", nullable: false),
-                    SenderId = table.Column<int>(type: "int", nullable: false),
-                    ExecutorId = table.Column<int>(type: "int", nullable: true),
-                    RequestInfoId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Requests", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Requests_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Requests_Priorities_PriorityId",
-                        column: x => x.PriorityId,
-                        principalTable: "Priorities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Requests_RequestInfo_RequestInfoId",
-                        column: x => x.RequestInfoId,
-                        principalTable: "RequestInfo",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Requests_RequestTypes_RequestTypeId",
-                        column: x => x.RequestTypeId,
-                        principalTable: "RequestTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Requests_Statuses_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "Statuses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Requests_Users_ExecutorId",
-                        column: x => x.ExecutorId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Requests_Users_SenderId",
-                        column: x => x.SenderId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -321,6 +280,45 @@ namespace DataAccess.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RequestInfo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Result = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Solution = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExecutionTime = table.Column<double>(type: "float", nullable: true),
+                    PlannedExecutionTime = table.Column<double>(type: "float", nullable: true),
+                    TypeId = table.Column<short>(type: "smallint", nullable: true),
+                    RequestSender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SolmanRequestNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ContactId = table.Column<short>(type: "smallint", nullable: true),
+                    Rountine = table.Column<bool>(type: "bit", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RootCause = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RequestId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RequestInfo", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RequestInfo_Contact_ContactId",
+                        column: x => x.ContactId,
+                        principalTable: "Contact",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_RequestInfo_Requests_RequestId",
+                        column: x => x.RequestId,
+                        principalTable: "Requests",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_RequestInfo_Type_TypeId",
+                        column: x => x.TypeId,
+                        principalTable: "Type",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.InsertData(
@@ -428,6 +426,13 @@ namespace DataAccess.Migrations
                 column: "ContactId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RequestInfo_RequestId",
+                table: "RequestInfo",
+                column: "RequestId",
+                unique: true,
+                filter: "[RequestId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RequestInfo_TypeId",
                 table: "RequestInfo",
                 column: "TypeId");
@@ -446,13 +451,6 @@ namespace DataAccess.Migrations
                 name: "IX_Requests_PriorityId",
                 table: "Requests",
                 column: "PriorityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Requests_RequestInfoId",
-                table: "Requests",
-                column: "RequestInfoId",
-                unique: true,
-                filter: "[RequestInfoId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Requests_RequestTypeId",
@@ -492,10 +490,19 @@ namespace DataAccess.Migrations
                 name: "Histories");
 
             migrationBuilder.DropTable(
+                name: "RequestInfo");
+
+            migrationBuilder.DropTable(
                 name: "UserOperationClaims");
 
             migrationBuilder.DropTable(
+                name: "Contact");
+
+            migrationBuilder.DropTable(
                 name: "Requests");
+
+            migrationBuilder.DropTable(
+                name: "Type");
 
             migrationBuilder.DropTable(
                 name: "OperationClaims");
@@ -507,9 +514,6 @@ namespace DataAccess.Migrations
                 name: "Priorities");
 
             migrationBuilder.DropTable(
-                name: "RequestInfo");
-
-            migrationBuilder.DropTable(
                 name: "RequestTypes");
 
             migrationBuilder.DropTable(
@@ -517,12 +521,6 @@ namespace DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Contact");
-
-            migrationBuilder.DropTable(
-                name: "Type");
         }
     }
 }

@@ -60,6 +60,36 @@ namespace Business
                 ForMember(dest => dest.UserFullName, opt => opt.MapFrom(src => src.User.FirstName + " " + src.User.LastName)).
                 ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.User.Position));
 
+            CreateMap<RequestInfoDto, RequestInfo>().
+                ForMember(dest => dest.RootCause, opt => opt.MapFrom(src => src.RootCause)).
+                ForMember(dest => dest.Result, opt => opt.MapFrom(src => src.Result)).
+                ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code)).
+                ForMember(dest => dest.ExecutionTime, opt => opt.MapFrom(src => src.ExecutionTime)).
+                ForMember(dest => dest.SolmanRequestNumber, opt => opt.MapFrom(src => src.SolmanRequestNumber)).
+                ForMember(dest => dest.PlannedExecutionTime, opt => opt.MapFrom(src => src.PlannedExecutionTime)).
+                ForMember(dest => dest.Rountine, opt => opt.MapFrom(src => src.Rountine)).
+                ForMember(dest => dest.Solution, opt => opt.MapFrom(src => src.Solution)).
+                ForMember(dest => dest.RequestSender, opt => opt.MapFrom(src => src.RequestSender)).
+                ForMember(dest => dest.ContactId, opt => opt.MapFrom(src => src.ContactId)).
+                ForMember(dest => dest.TypeId, opt => opt.MapFrom(src => src.TypeId)).
+                ForMember(dest => dest.RequestId, opt => opt.MapFrom(src => src.RequestId));
+
+            CreateMap<RequestInfo, RespRequestInfoDto>().
+                ForMember(dest => dest.RootCause, opt => opt.MapFrom(src => src.RootCause)).
+                ForMember(dest => dest.Result, opt => opt.MapFrom(src => src.Result)).
+                ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code)).
+                ForMember(dest => dest.ExecutionTime, opt => opt.MapFrom(src => src.ExecutionTime)).
+                ForMember(dest => dest.SolmanRequestNumber, opt => opt.MapFrom(src => src.SolmanRequestNumber)).
+                ForMember(dest => dest.PlannedExecutionTime, opt => opt.MapFrom(src => src.PlannedExecutionTime)).
+                ForMember(dest => dest.Rountine, opt => opt.MapFrom(src => src.Rountine)).
+                ForMember(dest => dest.Solution, opt => opt.MapFrom(src => src.Solution)).
+                ForMember(dest => dest.RequestSender, opt => opt.MapFrom(src => src.RequestSender)).
+                ForMember(dest => dest.ContactName, opt => opt.MapFrom(src => src.Contact.Name)).
+                ForMember(dest => dest.PriorityName, opt => opt.MapFrom(src => src.Request.Priority.Name)).
+                ForMember(dest => dest.TypeName, opt => opt.MapFrom(src => src.Type.Name)).
+                ForMember(dest => dest.RequestTypeName, opt => opt.MapFrom(src => src.Request.RequestType.Name));
+                
+
         }
     }
 }

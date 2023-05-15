@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Business.Abstract;
 using Business.Constants;
+using Core.Utilities.Business;
 using Core.Utilities.Results;
 using Core.Utilities.Security.Hashing;
 using Core.Utilities.Security.JWT;
@@ -13,7 +14,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Business.Concrete
@@ -24,14 +27,16 @@ namespace Business.Concrete
         private readonly ITokenHelper _tokenHelper;
         private readonly IMapper _mapper;
         private readonly IUnitofWork _unitofWork;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
 
-        public AuthManager(IUserService userService, ITokenHelper tokenHelper, IMapper mapper,IUnitofWork unitofWork)
+        public AuthManager(IUserService userService, ITokenHelper tokenHelper, IMapper mapper, IUnitofWork unitofWork, IHttpContextAccessor httpContextAccessor)
         {
             _userService = userService;
             _tokenHelper = tokenHelper;
             _mapper = mapper;
             _unitofWork = unitofWork;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public IDataResult<User> Login(UserLoginDto userForLoginDto)
@@ -57,11 +62,18 @@ namespace Business.Concrete
             return new SuccessDataResult<AccessToken>(accessToken);
         }
 
-        public IDataResult<User> Register(UserRegisterDto userRegisterDto, string password)
+        public IResult Register(UserRegisterDto userRegisterDto, string password)
         {
+            IResult result = BusinessRules.Run(CheckPasswordValidation(password));
+
+            if (result != null)
+            {
+                return result;
+            }
+
             byte[] passwordHash, passwordSalt;
             HashingHelper.CreatePasswordHash(password, out passwordHash, out passwordSalt);
-            
+
             var user = _mapper.Map<User>(userRegisterDto);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
@@ -82,9 +94,9 @@ namespace Business.Concrete
 
                 ++number;
                 if (number == 1) _userService.Add(user); //yuxarida yazdiqda(dovrden colde) category movcud olmasa bele add edecek useri
-                //burda dovr icinde oldugu ucun her defe user add elememk ucun ise number ile yoxlanis edirem
+                                                         //burda dovr icinde oldugu ucun her defe user add elememk ucun ise number ile yoxlanis edirem
 
-                
+
 
                 CategoryUser categoryUser = new CategoryUser
                 {
@@ -97,7 +109,7 @@ namespace Business.Concrete
             }
             // User Categoryuserden evvel add edilmelidirki Categoryuser table na Userin Id sini qeyd ede bilek.
             _unitofWork.Complete();
-            return new SuccessDataResult<User>(user, Messages.SuccessfullyRegister);
+            return new SuccessResult(Messages.SuccessfullyRegister);
         }
 
         public IResult UserExists(string username)
@@ -107,6 +119,64 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.UserAlreadyExists);
             }
             return new SuccessResult();
+        }
+
+        public IResult ChangePassword(string oldpassword, string newpassword, string repeatnewpassword)
+        {
+            int userid = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+            var user = _unitofWork.User.GetAll(u => u.Id == userid).FirstOrDefault();
+
+            IResult result = BusinessRules.Run(
+                CheckCurrentPassword(oldpassword, user, newpassword),
+                CheckPasswordValidation(newpassword),
+                CheckRepeatPassword(newpassword,repeatnewpassword));
+
+            if (result != null)
+            {
+                return result;
+            }
+            byte[] passwordHash, passwordSalt;
+            HashingHelper.CreatePasswordHash(newpassword, out passwordHash, out passwordSalt);
+
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+
+            _unitofWork.User.Update(user);
+            return new SuccessResult(Messages.SuccessfullyUpdated);
+        }
+
+        public IResult CheckPasswordValidation(string password)
+        {
+            return
+            (password.Length < 8 && !Regex.IsMatch(password, @"[a-zA-Z]"))
+            ? new ErrorResult("Password length must be more 8 character or equal and  must not have only with numbers") :
+            (password.Length < 8 || (password.Length < 8 && Regex.IsMatch(password, @"[a-zA-Z]"))
+            ? new ErrorResult("Password length must be more 8 character or equal") :
+            (!Regex.IsMatch(password, @"[a-zA-Z]"))
+            ? new ErrorResult("Password must not have only with numbers") :
+            new SuccessResult());
+        }
+
+        public IResult CheckCurrentPassword(string currentpassword, User user, string newpassword)
+        {
+            return 
+            (!HashingHelper.VerifyPasswordHash(currentpassword, user.PasswordHash, user.PasswordSalt))
+            ?new ErrorResult(Messages.PasswordError) :
+            (currentpassword == newpassword)
+            ?new ErrorResult("Old password must not again using"):
+            new SuccessResult();
+        }
+
+        public IResult CheckRepeatPassword(string newpassword, string repeatnewpassword)
+        {
+            return (repeatnewpassword != newpassword)
+            ? new ErrorResult("Repeat password is not correct") : 
+              new SuccessResult();
+        }
+
+        public IResult ChangeImage(IFormFile file)
+        {
+            throw new NotImplementedException();
         }
     }
 }

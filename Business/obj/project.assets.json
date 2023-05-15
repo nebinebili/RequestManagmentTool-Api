@@ -987,6 +987,7 @@
           "Autofac.Extras.DynamicProxy": "6.0.1",
           "Entities": "1.0.0",
           "FluentValidation": "11.5.1",
+          "Microsoft.AspNetCore.Http.Features": "2.2.0",
           "Microsoft.EntityFrameworkCore": "6.0.14",
           "Microsoft.EntityFrameworkCore.SqlServer": "6.0.14",
           "Microsoft.Extensions.Configuration": "6.0.1",
@@ -2520,7 +2521,7 @@
       "projectName": "Business",
       "projectPath": "C:\\Users\\nbili\\source\\repos\\RequestManagmentTool-Api\\Business\\Business.csproj",
       "packagesPath": "C:\\Users\\nbili\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\nbili\\Source\\Repos\\RequestManagmentTool-Api\\Business\\obj\\",
+      "outputPath": "C:\\Users\\nbili\\source\\repos\\RequestManagmentTool-Api\\Business\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\nbili\\AppData\\Roaming\\NuGet\\NuGet.Config",

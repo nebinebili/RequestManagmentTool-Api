@@ -20,13 +20,16 @@ namespace Entities.Concrete
         public string? RequestSender { get; set; }
         public string? SolmanRequestNumber { get; set; }
         public short? ContactId { get; set; }
-        public Contact? Contact { get; set; }
         public bool? Rountine { get; set; }
+        public Contact? Contact { get; set; }
         public string? Code { get; set; }
         public string? RootCause { get; set; }
 
         public Request? Request { get; set; }
-        public short? PriorityId { get; set; }
-        public short? RequestTypeId { get; set; }
+        public int? RequestId { get; set; }
+        //public Priority? Priority { get; set; }
+        //public short? PriorityId { get; set; }
+        //public RequestType? RequestType { get; set; }
+        //public short? RequestTypeId { get; set; }
     }
 }

@@ -19,13 +19,18 @@ namespace Business.Constants
 
         public static string PasswordError = "Password Error";
 
-        public static string SuccessfullyListed = "Successfully Listed";
+        public static string SuccessfullyListed = "Datas Successfully Listed";
 
         public static string UserAlreadyExists = "User Already Exists";
 
         public static string CategoryDoesNotExist = "Category Does Not Exist";
+
         public static string NotPermissonCategory = "Not have permisson create this category";
 
+        public static string SuccessfullyFound = "Data Successfully Found";
 
+        public static string SuccessfullyUpdated = "Data Successfully Updated";
+
+        
     }
 }

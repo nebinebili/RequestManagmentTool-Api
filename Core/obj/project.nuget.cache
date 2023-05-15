@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "/bewvKag1Jd5hB1ygo7D2gZARM0ZQkAGD688BW7B/9xzTsaMyX144HmwNd4yJWHujS3CHl4EwEXMy//Dz0hpDA==",
+  "dgSpecHash": "IVC2zzmrH1LXUlULB1XCuBwbsyIZpbyAG5ws8pmo3LR47gfdGCCrtMDUVJbNxiSUeTasD+CVJJ+DcYYSPj7qig==",
   "success": true,
   "projectFilePath": "C:\\Users\\nbili\\source\\repos\\RequestManagmentTool-Api\\Core\\Core.csproj",
   "expectedPackageFiles": [
@@ -10,6 +10,7 @@
     "C:\\Users\\nbili\\.nuget\\packages\\castle.core\\4.4.0\\castle.core.4.4.0.nupkg.sha512",
     "C:\\Users\\nbili\\.nuget\\packages\\fluentvalidation\\11.5.1\\fluentvalidation.11.5.1.nupkg.sha512",
     "C:\\Users\\nbili\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
+    "C:\\Users\\nbili\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.2.0\\microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512",
     "C:\\Users\\nbili\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\nbili\\.nuget\\packages\\microsoft.data.sqlclient\\2.1.4\\microsoft.data.sqlclient.2.1.4.nupkg.sha512",
     "C:\\Users\\nbili\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\2.1.1\\microsoft.data.sqlclient.sni.runtime.2.1.1.nupkg.sha512",

@@ -32,8 +32,9 @@ namespace DataAccess.Concrete.EntityFramework
 
             modelBuilder.Entity<Request>().HasOne(r => r.Executor).WithMany(e => e.ExecutorRequests).HasForeignKey(r => r.ExecutorId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Request>().HasOne(r => r.Sender).WithMany(e => e.SenderRequests).HasForeignKey(r => r.SenderId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Request>().HasOne(r => r.RequestInfo).WithOne(e => e.Request).HasForeignKey<Request>(r => r.RequestInfoId);
+            modelBuilder.Entity<Request>().HasOne(r => r.RequestInfo).WithOne(e => e.Request).HasForeignKey<RequestInfo>(r => r.RequestId);
 
+           
             //SeedData.Data(modelBuilder);
         }
 

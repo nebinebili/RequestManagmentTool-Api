@@ -57,15 +57,24 @@ namespace WebAPI.Controllers
             {
                 return BadRequest(registerResult.Message);
             }
-            var result = _authService.CreateAccessToken(registerResult.Data);
-            if (!result.Success)
-            {
-                return BadRequest(result.Message);
-            }
-
-            return Ok(result.Data);
+            
+            return Ok(registerResult);
 
         }
 
+        [HttpPut("ChangePassword")]
+        public IActionResult ChangePassword(string oldpassword,string newpassword,string repeatnewpassword)
+        {
+            var result = _authService.ChangePassword(oldpassword, newpassword, repeatnewpassword);
+            
+            if (!result.Success)
+            {
+
+                return BadRequest(result.Message);
+            }
+
+            return Ok(result);
+
+        }
     }
 }

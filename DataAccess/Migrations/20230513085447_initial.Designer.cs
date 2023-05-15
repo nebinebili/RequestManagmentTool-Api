@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(CICRequestContext))]
-    [Migration("20230508125938_initial")]
+    [Migration("20230513085447_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -276,9 +276,6 @@ namespace DataAccess.Migrations
                     b.Property<short>("PriorityId")
                         .HasColumnType("smallint");
 
-                    b.Property<int?>("RequestInfoId")
-                        .HasColumnType("int");
-
                     b.Property<short>("RequestTypeId")
                         .HasColumnType("smallint");
 
@@ -306,10 +303,6 @@ namespace DataAccess.Migrations
                     b.HasIndex("ExecutorId");
 
                     b.HasIndex("PriorityId");
-
-                    b.HasIndex("RequestInfoId")
-                        .IsUnique()
-                        .HasFilter("[RequestInfoId] IS NOT NULL");
 
                     b.HasIndex("RequestTypeId");
 
@@ -340,14 +333,11 @@ namespace DataAccess.Migrations
                     b.Property<double?>("PlannedExecutionTime")
                         .HasColumnType("float");
 
-                    b.Property<short?>("PriorityId")
-                        .HasColumnType("smallint");
+                    b.Property<int?>("RequestId")
+                        .HasColumnType("int");
 
                     b.Property<string>("RequestSender")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<short?>("RequestTypeId")
-                        .HasColumnType("smallint");
 
                     b.Property<string>("Result")
                         .HasColumnType("nvarchar(max)");
@@ -370,6 +360,10 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ContactId");
+
+                    b.HasIndex("RequestId")
+                        .IsUnique()
+                        .HasFilter("[RequestId] IS NOT NULL");
 
                     b.HasIndex("TypeId");
 
@@ -685,10 +679,6 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Concrete.RequestInfo", "RequestInfo")
-                        .WithOne("Request")
-                        .HasForeignKey("Entities.Concrete.Request", "RequestInfoId");
-
                     b.HasOne("Entities.Concrete.RequestType", "RequestType")
                         .WithMany("Requests")
                         .HasForeignKey("RequestTypeId")
@@ -712,8 +702,6 @@ namespace DataAccess.Migrations
 
                     b.Navigation("Priority");
 
-                    b.Navigation("RequestInfo");
-
                     b.Navigation("RequestType");
 
                     b.Navigation("Sender");
@@ -727,11 +715,17 @@ namespace DataAccess.Migrations
                         .WithMany("RequestInfos")
                         .HasForeignKey("ContactId");
 
+                    b.HasOne("Entities.Concrete.Request", "Request")
+                        .WithOne("RequestInfo")
+                        .HasForeignKey("Entities.Concrete.RequestInfo", "RequestId");
+
                     b.HasOne("Entities.Concrete.Type", "Type")
                         .WithMany("RequestInfos")
                         .HasForeignKey("TypeId");
 
                     b.Navigation("Contact");
+
+                    b.Navigation("Request");
 
                     b.Navigation("Type");
                 });
@@ -780,11 +774,9 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Entities.Concrete.Request", b =>
                 {
                     b.Navigation("Comments");
-                });
 
-            modelBuilder.Entity("Entities.Concrete.RequestInfo", b =>
-                {
-                    b.Navigation("Request");
+                    b.Navigation("RequestInfo")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Entities.Concrete.RequestType", b =>
