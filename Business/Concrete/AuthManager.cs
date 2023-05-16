@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Business.Abstract;
 using Business.Constants;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using Core.Utilities.Business;
+using Core.Utilities.Helpers.FileHelper;
 using Core.Utilities.Results;
 using Core.Utilities.Security.Hashing;
 using Core.Utilities.Security.JWT;
@@ -24,6 +27,7 @@ namespace Business.Concrete
     public class AuthManager : IAuthService
     {
         private readonly IUserService _userService;
+        private readonly IFileHelper _fileHelper;
         private readonly ITokenHelper _tokenHelper;
         private readonly IMapper _mapper;
         private readonly IUnitofWork _unitofWork;
@@ -176,7 +180,50 @@ namespace Business.Concrete
 
         public IResult ChangeImage(IFormFile file)
         {
-            throw new NotImplementedException();
+            int userid = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+            var user = _unitofWork.User.GetAll(u => u.Id == userid).FirstOrDefault();
+
+            IResult result = BusinessRules.Run(CheckFileType(file.FileName));
+
+            if (result != null)
+            {
+                return result;
+            }
+            Account account = new Account(
+  "dovwnscw0",
+  "284218664169171",
+  "Av8XUG8AFAiQOTyGS0v21DO1WVo");
+
+            Cloudinary cloudinary = new Cloudinary(account);
+            FileInfo fi = new FileInfo(file.FileName);
+            var uploadParams = new ImageUploadParams()
+            {
+                
+                File = new FileDescription(fi.FullName)
+            };
+            var uploadResult = cloudinary.Upload(uploadParams);
+            var something = uploadResult.Url;
+
+            //var ImagePath = _fileHelper.Upload(file, PathConstants.ImagesPath);
+            //user.ProfilPicture = ImagePath;
+            //_unitofWork.User.Update(user);
+            return new SuccessResult(Messages.SuccessfullyUpdated);
+        }
+
+        public IResult CheckFileType(string fileName)
+        {
+            string ext = Path.GetExtension(fileName);
+            switch (ext.ToLower())
+            {
+                case ".jpg":
+                    return new SuccessResult();
+                case ".jpeg":
+                    return new SuccessResult();
+                case ".png":
+                    return new SuccessResult();
+                default:
+                    return new ErrorResult(Messages.ErrorFileFormat);
+            }
         }
     }
 }

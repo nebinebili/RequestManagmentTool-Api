@@ -165,3 +165,5 @@ C:\Users\nbili\Source\Repos\RequestManagmentTool-Api\WebAPI\obj\Debug\net6.0\ref
 C:\Users\nbili\Source\Repos\RequestManagmentTool-Api\WebAPI\obj\Debug\net6.0\WebAPI.pdb
 C:\Users\nbili\Source\Repos\RequestManagmentTool-Api\WebAPI\obj\Debug\net6.0\WebAPI.genruntimeconfig.cache
 C:\Users\nbili\Source\Repos\RequestManagmentTool-Api\WebAPI\obj\Debug\net6.0\ref\WebAPI.dll
+C:\Users\nbili\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\CloudinaryDotNet.dll
+C:\Users\nbili\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\Newtonsoft.Json.dll

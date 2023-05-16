@@ -31,6 +31,8 @@ namespace Business.Constants
 
         public static string SuccessfullyUpdated = "Data Successfully Updated";
 
+        public static string ErrorFileFormat = "Not an allowed format";
+
         
     }
 }
