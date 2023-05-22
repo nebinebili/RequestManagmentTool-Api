@@ -33,9 +33,10 @@ namespace DataAccess.Concrete.EntityFramework
             modelBuilder.Entity<Request>().HasOne(r => r.Executor).WithMany(e => e.ExecutorRequests).HasForeignKey(r => r.ExecutorId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Request>().HasOne(r => r.Sender).WithMany(e => e.SenderRequests).HasForeignKey(r => r.SenderId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Request>().HasOne(r => r.RequestInfo).WithOne(e => e.Request).HasForeignKey<RequestInfo>(r => r.RequestId);
+            modelBuilder.Entity<Entities.Concrete.File>().HasOne(r => r.User).WithOne(e => e.File).HasForeignKey<User>(r => r.ImageId);
 
            
-            //SeedData.Data(modelBuilder);
+            SeedData.Data(modelBuilder);
         }
 
         public DbSet<User> Users { get; set; }
@@ -49,6 +50,7 @@ namespace DataAccess.Concrete.EntityFramework
         public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
         public DbSet<OperationClaim> OperationClaims { get; set; }
         public DbSet<CategoryUser> CategoryUsers { get; set; }
+        public DbSet<Entities.Concrete.File> Files { get; set; }
 
     }
 }

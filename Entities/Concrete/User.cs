@@ -19,7 +19,7 @@ namespace Entities.Concrete
        public string Position { get; set; }
        public string InnerPhone { get; set; }
        public string MobilPhone { get; set; }
-       public string? ProfilPicture { get; set; }
+       public int? ImageId { get; set; }
        public bool NotificationPermission { get; set; }
        public bool IsActive { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
@@ -30,6 +30,7 @@ namespace Entities.Concrete
         public ICollection<History> Histories { get; set; }
         public ICollection<CategoryUser> CategoryUsers { get; set; }
         public ICollection<UserOperationClaim>  UserOperationClaims { get; set; }
+        public File File { get; set; }
         
 
 

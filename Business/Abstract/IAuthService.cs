@@ -18,7 +18,7 @@ namespace Business.Abstract
         IResult Register(UserRegisterDto userForRegisterDto, string password);
         IResult ChangePassword(string oldpassword,string newpassword,string repeatnewpassword);
         IResult ChangeImage(IFormFile file);
-
+        IResult DeleteImage();
         IResult UserExists(string username);
     }
 }

@@ -32,6 +32,7 @@ namespace Entities.Concrete
         public User Sender { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
+        public ICollection<History> Histories { get; set; }
         public RequestInfo RequestInfo { get; set; }
 
     }

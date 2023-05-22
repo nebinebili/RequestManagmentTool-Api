@@ -26,15 +26,15 @@ namespace Business
                 ForMember(dest => dest.ExecutorName, opt => opt.MapFrom(src => src.Executor.UserName)).
                 ForMember(dest => dest.SenderName, opt => opt.MapFrom(src => src.Sender.UserName));
 
-            CreateMap<UserRegisterDto,User>().
+            CreateMap<UserRegisterDto, User>().
                 ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName)).
                 ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName)).
                 ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName)).
                 ForMember(dest => dest.Department, opt => opt.MapFrom(src => src.Department)).
                 ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.Position)).
                 ForMember(dest => dest.InnerPhone, opt => opt.MapFrom(src => src.InnerPhone)).
-                ForMember(dest => dest.MobilPhone, opt => opt.MapFrom(src => src.MobilPhone)).
-                ForMember(dest => dest.ProfilPicture, opt => opt.MapFrom(src => src.ProfilPicture));
+                ForMember(dest => dest.MobilPhone, opt => opt.MapFrom(src => src.MobilPhone));
+           
 
             CreateMap<CreateRequestDto, Request>().
                 ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId)).

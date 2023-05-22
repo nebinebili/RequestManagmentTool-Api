@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(CICRequestContext))]
-    [Migration("20230513090240_addRequst")]
-    partial class addRequst
+    [Migration("20230522074121_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -182,6 +182,42 @@ namespace DataAccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Entities.Concrete.File", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Extension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileOriginalName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MimeType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Files");
+                });
+
             modelBuilder.Entity("Entities.Concrete.History", b =>
                 {
                     b.Property<int>("Id")
@@ -193,10 +229,19 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RequestId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RequestId");
 
                     b.HasIndex("UserId");
 
@@ -311,71 +356,6 @@ namespace DataAccess.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("Requests");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryId = (short)3,
-                            Date = new DateTime(2023, 5, 13, 13, 2, 40, 219, DateTimeKind.Local).AddTicks(5347),
-                            PriorityId = (short)1,
-                            RequestTypeId = (short)5,
-                            SenderId = 1,
-                            StatusId = (short)2,
-                            Text = "email test edilme isi",
-                            Title = "#email Test"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CategoryId = (short)2,
-                            Date = new DateTime(2023, 5, 13, 13, 2, 40, 219, DateTimeKind.Local).AddTicks(5366),
-                            ExecutorId = 1,
-                            PriorityId = (short)3,
-                            RequestTypeId = (short)2,
-                            SenderId = 3,
-                            StatusId = (short)1,
-                            Text = "odenislerin silinmesi emeliyyati",
-                            Title = "Odenislerin silinmesi"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CategoryId = (short)4,
-                            Date = new DateTime(2023, 5, 13, 13, 2, 40, 219, DateTimeKind.Local).AddTicks(5368),
-                            ExecutorId = 2,
-                            PriorityId = (short)2,
-                            RequestTypeId = (short)5,
-                            SenderId = 3,
-                            StatusId = (short)1,
-                            Text = "odenislerin arasdirilimasi emeliyyati",
-                            Title = "Odenislerin arasdirilimasi"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CategoryId = (short)5,
-                            Date = new DateTime(2023, 5, 13, 13, 2, 40, 219, DateTimeKind.Local).AddTicks(5369),
-                            PriorityId = (short)2,
-                            RequestTypeId = (short)7,
-                            SenderId = 2,
-                            StatusId = (short)3,
-                            Text = "email egov emeliyyati",
-                            Title = "email egov"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CategoryId = (short)4,
-                            Date = new DateTime(2023, 5, 13, 13, 2, 40, 219, DateTimeKind.Local).AddTicks(5370),
-                            ExecutorId = 3,
-                            PriorityId = (short)2,
-                            RequestTypeId = (short)3,
-                            SenderId = 1,
-                            StatusId = (short)3,
-                            Text = "muqavile emeliyyati",
-                            Title = "muqavile"
-                        });
                 });
 
             modelBuilder.Entity("Entities.Concrete.RequestInfo", b =>
@@ -600,6 +580,9 @@ namespace DataAccess.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<int?>("ImageId")
+                        .HasColumnType("int");
+
                     b.Property<string>("InnerPhone")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -640,15 +623,16 @@ namespace DataAccess.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("ProfilPicture")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ImageId")
+                        .IsUnique()
+                        .HasFilter("[ImageId] IS NOT NULL");
 
                     b.ToTable("Users");
                 });
@@ -716,11 +700,19 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concrete.History", b =>
                 {
+                    b.HasOne("Entities.Concrete.Request", "Request")
+                        .WithMany("Histories")
+                        .HasForeignKey("RequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Entities.Concrete.User", "User")
                         .WithMany("Histories")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Request");
 
                     b.Navigation("User");
                 });
@@ -795,6 +787,15 @@ namespace DataAccess.Migrations
                     b.Navigation("Type");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.User", b =>
+                {
+                    b.HasOne("Entities.Concrete.File", "File")
+                        .WithOne("User")
+                        .HasForeignKey("Entities.Concrete.User", "ImageId");
+
+                    b.Navigation("File");
+                });
+
             modelBuilder.Entity("Entities.Concrete.UserOperationClaim", b =>
                 {
                     b.HasOne("Entities.Concrete.OperationClaim", "OperationClaim")
@@ -826,6 +827,12 @@ namespace DataAccess.Migrations
                     b.Navigation("RequestInfos");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.File", b =>
+                {
+                    b.Navigation("User")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Entities.Concrete.OperationClaim", b =>
                 {
                     b.Navigation("UserOperationClaims");
@@ -839,6 +846,8 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Entities.Concrete.Request", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Histories");
 
                     b.Navigation("RequestInfo")
                         .IsRequired();

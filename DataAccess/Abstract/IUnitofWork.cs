@@ -20,6 +20,9 @@ namespace DataAccess.Abstract
         IContactDal Contact { get; }
         IRequestTypeDal RequestType { get; }
         IPriorityDal Priority { get; }
+        IStatusDal Status { get; }
+        IHistoryDal History { get; }
+        IFileDal File { get; }
         int Complete();
     }
 }

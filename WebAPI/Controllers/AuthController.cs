@@ -78,9 +78,20 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("ChangeImage")]
-        public IActionResult Add(IFormFile file)
+        public IActionResult ChangeImage(IFormFile file)
         {
             var result = _authService.ChangeImage(file);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpDelete("DeleteImage")]
+        public IActionResult DeleteImage()
+        {
+            var result = _authService.DeleteImage();
             if (result.Success)
             {
                 return Ok(result);

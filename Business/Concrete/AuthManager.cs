@@ -13,14 +13,19 @@ using DataAccess.Concrete;
 using Entities.Concrete;
 using Entities.DTOs;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using File = Entities.Concrete.File;
+
+
 
 namespace Business.Concrete
 {
@@ -32,20 +37,24 @@ namespace Business.Concrete
         private readonly IMapper _mapper;
         private readonly IUnitofWork _unitofWork;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        public IConfiguration _configuration { get; }
 
 
-        public AuthManager(IUserService userService, ITokenHelper tokenHelper, IMapper mapper, IUnitofWork unitofWork, IHttpContextAccessor httpContextAccessor)
+
+        public AuthManager(IConfiguration configuration,IUserService userService,IFileHelper fileHelper,ITokenHelper tokenHelper, IMapper mapper, IUnitofWork unitofWork, IHttpContextAccessor httpContextAccessor)
         {
             _userService = userService;
             _tokenHelper = tokenHelper;
             _mapper = mapper;
             _unitofWork = unitofWork;
             _httpContextAccessor = httpContextAccessor;
+            _fileHelper = fileHelper;
+            _configuration = configuration;
         }
 
         public IDataResult<User> Login(UserLoginDto userForLoginDto)
         {
-            var userCheck = _userService.GetByUserName(userForLoginDto.UserName);
+            var userCheck =_userService.GetByUserName(userForLoginDto.UserName);
 
             if (userCheck == null)
             {
@@ -189,24 +198,26 @@ namespace Business.Concrete
             {
                 return result;
             }
-            Account account = new Account(
-  "dovwnscw0",
-  "284218664169171",
-  "Av8XUG8AFAiQOTyGS0v21DO1WVo");
 
-            Cloudinary cloudinary = new Cloudinary(account);
-            FileInfo fi = new FileInfo(file.FileName);
-            var uploadParams = new ImageUploadParams()
+            string str = _configuration.GetSection("ImagePath").GetSection("Path").Value;
+            var filePath=_fileHelper.Upload(file, str);
+
+
+
+            File imageFile = new File
             {
-                
-                File = new FileDescription(fi.FullName)
+                FileOriginalName = file.FileName,
+                Size = file.Length,
+                MimeType = file.ContentType,
+                Extension = Path.GetExtension(filePath),
+                FileName = filePath,
+                Path = str
             };
-            var uploadResult = cloudinary.Upload(uploadParams);
-            var something = uploadResult.Url;
 
-            //var ImagePath = _fileHelper.Upload(file, PathConstants.ImagesPath);
-            //user.ProfilPicture = ImagePath;
-            //_unitofWork.User.Update(user);
+            _unitofWork.File.Add(imageFile);
+
+            user.ImageId = imageFile.Id;
+            _unitofWork.User.Update(user);
             return new SuccessResult(Messages.SuccessfullyUpdated);
         }
 
@@ -224,6 +235,26 @@ namespace Business.Concrete
                 default:
                     return new ErrorResult(Messages.ErrorFileFormat);
             }
+        }
+
+        public IResult DeleteImage()
+        {
+            int userid = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
+            var user = _unitofWork.User.GetAll(u => u.Id == userid).FirstOrDefault();
+            var image=_unitofWork.File.GetAll(f=>f.Id==user.ImageId).FirstOrDefault();
+
+            if (image == null) return new ErrorResult(Messages.NoImage);
+
+            user.ImageId = null;
+            _unitofWork.User.Update(user);
+
+            _unitofWork.File.Delete(image);
+
+
+            _fileHelper.Delete(Path.Combine(image.Path + "\\" + image.FileName));
+
+
+            return new SuccessResult(Messages.SuccessfullyDeleted);
         }
     }
 }

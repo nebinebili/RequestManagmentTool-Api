@@ -26,7 +26,9 @@ namespace DataAccess.Concrete
             Type=new EfTypeDal(this._context);
             Contact=new EfContactDal(this._context);
             RequestType=new EfRequestTypeDal(this._context);
-            Priority=new EfPriorityDal(this._context);  
+            Priority=new EfPriorityDal(this._context);
+            Status=new EfStatusDal(this._context);
+            File=new EfFileDal(this._context);
         }
 
         public IUserDal User { get; private set; }
@@ -39,6 +41,9 @@ namespace DataAccess.Concrete
         public IContactDal Contact { get; private set; }
         public IRequestTypeDal RequestType { get; private set; }
         public IPriorityDal Priority { get; private set; }
+        public IStatusDal Status { get; private set; }
+        public IHistoryDal History { get; private set; }
+        public IFileDal File { get; private set; }
 
         public void Dispose()
         {
