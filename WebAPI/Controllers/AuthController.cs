@@ -12,14 +12,10 @@ namespace WebAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-
-        public AuthController(IAuthService authService,IHttpContextAccessor httpContextAccessor)
+        public AuthController(IAuthService authService)
         {
             _authService = authService;
-            _httpContextAccessor = httpContextAccessor;
-
         }
 
         [HttpPost("login")]

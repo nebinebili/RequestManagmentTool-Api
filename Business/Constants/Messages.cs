@@ -47,6 +47,8 @@ namespace Business.Constants
 
         public static string LockMessage = "Sorgu icraya alindi";
 
+        public static string NoWaitMessage = "Sorğunu gözləmədən çıxardı";
+
         public static string NoImage = "Currently you have not an image";
 
         

@@ -9,11 +9,10 @@ namespace Entities.Enums
     public enum AvailableStatus
     {
         Open=1,
-        Close=2,
-        Lock=3,
-        Wait=4,
-        Confirm=5,
-        Reject=6
-
+        Lock=2,
+        Close=3,
+        Confirm=4,
+        Reject=5,
+        Wait=6,
     }
 }

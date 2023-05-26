@@ -19,7 +19,6 @@ namespace Business.Concrete
     public class StatusManager : IStatusService
     {
         private readonly IUnitofWork _unitofWork;
-        private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public StatusManager(IUnitofWork unitofWork,IHttpContextAccessor httpContextAccessor)
@@ -31,7 +30,7 @@ namespace Business.Concrete
         public IResult UpdateStatus(int requestId, short? statusId)
         {
             var userId = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
-            Request? request = _unitofWork.Request.GetAll(r => r.Id == requestId).SingleOrDefault();
+            Request? request = _unitofWork.Request.GetAllRequest(userId).Where(r=>r.Id==requestId).SingleOrDefault();
             if (request == null)
             {
                 return new ErrorResult(Messages.RequestDoesNotExist);
@@ -48,7 +47,7 @@ namespace Business.Concrete
                     {
                         request.StatusId = (short)statusId;
                         _unitofWork.Request.Update(request);
-                        history.Message = "Sorğunu gözləmədən çıxardı";
+                        history.Message = Messages.NoWaitMessage;
                     }
                     else
                     {
@@ -64,7 +63,7 @@ namespace Business.Concrete
                 {
                     request.StatusId = (short)statusId;
                     _unitofWork.Request.Update(request);
-                    History history = new History() { UserId = userId, RequestId = requestId, Message = statusId == ((short)AvailableStatus.Close) ? Messages.CloseMessage : statusId == ((short)AvailableStatus.Wait) ? Messages.WaitMessage : statusId == ((short)AvailableStatus.Confirm) ? Messages.ConfirmMessage : "", Date = DateTime.Now };
+                    History history = new History{ UserId = userId, RequestId = requestId, Message = statusId == ((short)AvailableStatus.Close) ? Messages.CloseMessage : statusId == ((short)AvailableStatus.Wait) ? Messages.WaitMessage : statusId == ((short)AvailableStatus.Confirm) ? Messages.ConfirmMessage : "", Date = DateTime.Now };
                     _unitofWork.History.Add(history);
                     return new SuccessResult(Messages.SuccessfullyUpdated);
                 }

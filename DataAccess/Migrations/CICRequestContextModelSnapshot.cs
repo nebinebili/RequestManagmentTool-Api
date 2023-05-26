@@ -354,6 +354,71 @@ namespace DataAccess.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("Requests");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CategoryId = (short)3,
+                            Date = new DateTime(2023, 5, 24, 10, 36, 1, 393, DateTimeKind.Local).AddTicks(6511),
+                            PriorityId = (short)1,
+                            RequestTypeId = (short)5,
+                            SenderId = 1,
+                            StatusId = (short)2,
+                            Text = "email test edilme isi",
+                            Title = "#email Test"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CategoryId = (short)2,
+                            Date = new DateTime(2023, 5, 24, 10, 36, 1, 393, DateTimeKind.Local).AddTicks(6520),
+                            ExecutorId = 1,
+                            PriorityId = (short)3,
+                            RequestTypeId = (short)2,
+                            SenderId = 3,
+                            StatusId = (short)1,
+                            Text = "odenislerin silinmesi emeliyyati",
+                            Title = "Odenislerin silinmesi"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CategoryId = (short)4,
+                            Date = new DateTime(2023, 5, 24, 10, 36, 1, 393, DateTimeKind.Local).AddTicks(6521),
+                            ExecutorId = 2,
+                            PriorityId = (short)2,
+                            RequestTypeId = (short)5,
+                            SenderId = 3,
+                            StatusId = (short)1,
+                            Text = "odenislerin arasdirilimasi emeliyyati",
+                            Title = "Odenislerin arasdirilimasi"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CategoryId = (short)5,
+                            Date = new DateTime(2023, 5, 24, 10, 36, 1, 393, DateTimeKind.Local).AddTicks(6522),
+                            PriorityId = (short)2,
+                            RequestTypeId = (short)7,
+                            SenderId = 2,
+                            StatusId = (short)3,
+                            Text = "email egov emeliyyati",
+                            Title = "email egov"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CategoryId = (short)4,
+                            Date = new DateTime(2023, 5, 24, 10, 36, 1, 393, DateTimeKind.Local).AddTicks(6523),
+                            ExecutorId = 3,
+                            PriorityId = (short)2,
+                            RequestTypeId = (short)3,
+                            SenderId = 1,
+                            StatusId = (short)3,
+                            Text = "muqavile emeliyyati",
+                            Title = "muqavile"
+                        });
                 });
 
             modelBuilder.Entity("Entities.Concrete.RequestInfo", b =>

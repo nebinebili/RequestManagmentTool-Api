@@ -63,13 +63,13 @@ namespace DataAccess
                 new Type { Id = 2, Name="Application Development"}
                 );
 
-            //modelBuilder.Entity<Request>().HasData(
-            //    new Request { Id = 1, Title = "#email Test", Text = "email test edilme isi", CategoryId = 3, StatusId = 2, PriorityId = 1, RequestTypeId = 5, SenderId = 1 },
-            //    new Request { Id = 2, Title = "Odenislerin silinmesi", Text = "odenislerin silinmesi emeliyyati", CategoryId = 2, StatusId = 1, PriorityId = 3, RequestTypeId = 2, SenderId = 3, ExecutorId = 1 },
-            //    new Request { Id = 3, Title = "Odenislerin arasdirilimasi", Text = "odenislerin arasdirilimasi emeliyyati", CategoryId = 4, StatusId = 1, PriorityId = 2, RequestTypeId = 5, SenderId = 3, ExecutorId = 2 },
-            //    new Request { Id = 4, Title = "email egov", Text = "email egov emeliyyati", CategoryId = 5, StatusId = 3, PriorityId = 2, RequestTypeId = 7, SenderId = 2 },
-            //    new Request { Id = 5, Title = "muqavile", Text = "muqavile emeliyyati", CategoryId = 4, StatusId = 3, PriorityId = 2, RequestTypeId = 3, SenderId = 1, ExecutorId = 3 }
-            //    );
+            modelBuilder.Entity<Request>().HasData(
+                new Request { Id = 1, Title = "#email Test", Text = "email test edilme isi", CategoryId = 3, StatusId = 2, PriorityId = 1, RequestTypeId = 5, SenderId = 1 },
+                new Request { Id = 2, Title = "Odenislerin silinmesi", Text = "odenislerin silinmesi emeliyyati", CategoryId = 2, StatusId = 1, PriorityId = 3, RequestTypeId = 2, SenderId = 3, ExecutorId = 1 },
+                new Request { Id = 3, Title = "Odenislerin arasdirilimasi", Text = "odenislerin arasdirilimasi emeliyyati", CategoryId = 4, StatusId = 1, PriorityId = 2, RequestTypeId = 5, SenderId = 3, ExecutorId = 2 },
+                new Request { Id = 4, Title = "email egov", Text = "email egov emeliyyati", CategoryId = 5, StatusId = 3, PriorityId = 2, RequestTypeId = 7, SenderId = 2 },
+                new Request { Id = 5, Title = "muqavile", Text = "muqavile emeliyyati", CategoryId = 4, StatusId = 3, PriorityId = 2, RequestTypeId = 3, SenderId = 1, ExecutorId = 3 }
+                );
 
             // User 1 category3 create=true  exceute=false
             // User 1  category2  create=false    execute=true

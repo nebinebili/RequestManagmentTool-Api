@@ -60,6 +60,12 @@ namespace Business
                 ForMember(dest => dest.UserFullName, opt => opt.MapFrom(src => src.User.FirstName + " " + src.User.LastName)).
                 ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.User.Position));
 
+            CreateMap<History, HistoryDto>().
+                ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date)).
+                ForMember(dest => dest.Message, opt => opt.MapFrom(src => src.Message)).
+                ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.User.Position)).
+                ForMember(dest => dest.UserFullName, opt => opt.MapFrom(src => src.User.FirstName + " " + src.User.LastName));
+
             CreateMap<RequestInfoDto, RequestInfo>().
                 ForMember(dest => dest.RootCause, opt => opt.MapFrom(src => src.RootCause)).
                 ForMember(dest => dest.Result, opt => opt.MapFrom(src => src.Result)).

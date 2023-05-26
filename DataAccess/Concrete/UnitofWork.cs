@@ -29,6 +29,7 @@ namespace DataAccess.Concrete
             Priority=new EfPriorityDal(this._context);
             Status=new EfStatusDal(this._context);
             File=new EfFileDal(this._context);
+            History=new EfHistoryDal(this._context);
         }
 
         public IUserDal User { get; private set; }
