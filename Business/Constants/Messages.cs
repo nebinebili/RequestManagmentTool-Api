@@ -19,7 +19,7 @@ namespace Business.Constants
 
         public static string PasswordError = "Password Error";
 
-        public static string SuccessfullyListed = "Datas Successfully Listed";
+        public static string SuccessfullyListed = "Data Successfully Listed";
 
         public static string UserAlreadyExists = "User Already Exists";
 
@@ -50,6 +50,10 @@ namespace Business.Constants
         public static string NoWaitMessage = "Sorğunu gözləmədən çıxardı";
 
         public static string NoImage = "Currently you have not an image";
+
+        public static string NullData = "Data is NUll";
+
+        public static string UserHasNoRequest = "User has no request with this id";
 
         
     }

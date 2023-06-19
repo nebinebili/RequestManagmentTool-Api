@@ -22,9 +22,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("GetAllMyRequest")]
-        public IActionResult GetAllMyRequest(short? statusid,int pagenumber,int pagesize)
+        public IActionResult GetAllMyRequest(RequestSearchDto requestSearchDto)
         {
-            var result = _requestService.GetAllMyRequest(statusid,pagenumber,pagesize);
+            var result = _requestService.GetAllMyRequest(requestSearchDto);
             if (result.Success)
             {
                 return Ok(result);
@@ -46,7 +46,7 @@ namespace WebAPI.Controllers
         [HttpGet("GetByCategoryId")]
         public IActionResult GetByCategoryId(short? categoryid, short? statusid, int pagenumber, int pagesize)
         {
-            var result = _requestService.GetAllRequestByCategoryId(categoryid,statusid, pagenumber, pagesize);
+            var result = _requestService.GetAllRequestByCategoryId(categoryid, statusid, pagenumber, pagesize);
             if (result.Success)
             {
                 return Ok(result);
@@ -77,7 +77,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("Add")]
-        public IActionResult Add(CreateRequestDto createRequestDto)
+        public IActionResult Add([FromForm] CreateRequestDto createRequestDto)
         {
             var result = _requestService.Add(createRequestDto);
             if (result.Success)

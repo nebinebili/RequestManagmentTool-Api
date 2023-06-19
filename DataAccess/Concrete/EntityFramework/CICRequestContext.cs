@@ -33,7 +33,9 @@ namespace DataAccess.Concrete.EntityFramework
             modelBuilder.Entity<Request>().HasOne(r => r.Executor).WithMany(e => e.ExecutorRequests).HasForeignKey(r => r.ExecutorId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Request>().HasOne(r => r.Sender).WithMany(e => e.SenderRequests).HasForeignKey(r => r.SenderId).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Request>().HasOne(r => r.RequestInfo).WithOne(e => e.Request).HasForeignKey<RequestInfo>(r => r.RequestId);
-            modelBuilder.Entity<Entities.Concrete.File>().HasOne(r => r.User).WithOne(e => e.File).HasForeignKey<User>(r => r.ImageId);
+            modelBuilder.Entity<Entities.Concrete.File>().HasOne(f => f.User).WithOne(u => u.File).HasForeignKey<User>(u => u.ImageId);
+            modelBuilder.Entity<Entities.Concrete.File>().HasOne(f => f.Comment).WithOne(c => c.File).HasForeignKey<Comment>(c => c.CFileId);
+            modelBuilder.Entity<Entities.Concrete.File>().HasOne(f => f.Request).WithOne(r => r.File).HasForeignKey<Request>(r => r.RFileId);
 
            
             SeedData.Data(modelBuilder);

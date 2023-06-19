@@ -24,6 +24,7 @@ namespace Business
                 ForMember(dest => dest.StatusId, opt => opt.MapFrom(src => src.Status.Id)).
                 ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.Name)).
                 ForMember(dest => dest.ExecutorName, opt => opt.MapFrom(src => src.Executor.UserName)).
+                ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id)).
                 ForMember(dest => dest.SenderName, opt => opt.MapFrom(src => src.Sender.UserName));
 
             CreateMap<UserRegisterDto, User>().
@@ -34,15 +35,7 @@ namespace Business
                 ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.Position)).
                 ForMember(dest => dest.InnerPhone, opt => opt.MapFrom(src => src.InnerPhone)).
                 ForMember(dest => dest.MobilPhone, opt => opt.MapFrom(src => src.MobilPhone));
-           
-
-            CreateMap<CreateRequestDto, Request>().
-                ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId)).
-                ForMember(dest => dest.RequestTypeId, opt => opt.MapFrom(src => src.RequestTypeId)).
-                ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title)).
-                ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Text)).
-                ForMember(dest => dest.PriorityId, opt => opt.MapFrom(src => src.PriorityId)).ReverseMap();
-
+       
 
             CreateMap<Request, ReportOfRequestDto>().
                 ForMember(dest => dest.UserFullName, opt => opt.MapFrom(src => src.Sender.FirstName + " " + src.Sender.LastName)).

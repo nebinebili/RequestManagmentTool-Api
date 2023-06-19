@@ -119,6 +119,9 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int?>("CFileId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -133,6 +136,10 @@ namespace DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CFileId")
+                        .IsUnique()
+                        .HasFilter("[CFileId] IS NOT NULL");
 
                     b.HasIndex("RequestId");
 
@@ -319,6 +326,9 @@ namespace DataAccess.Migrations
                     b.Property<short>("PriorityId")
                         .HasColumnType("smallint");
 
+                    b.Property<int?>("RFileId")
+                        .HasColumnType("int");
+
                     b.Property<short>("RequestTypeId")
                         .HasColumnType("smallint");
 
@@ -347,6 +357,10 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("PriorityId");
 
+                    b.HasIndex("RFileId")
+                        .IsUnique()
+                        .HasFilter("[RFileId] IS NOT NULL");
+
                     b.HasIndex("RequestTypeId");
 
                     b.HasIndex("SenderId");
@@ -360,7 +374,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 1,
                             CategoryId = (short)3,
-                            Date = new DateTime(2023, 5, 24, 10, 36, 1, 393, DateTimeKind.Local).AddTicks(6511),
+                            Date = new DateTime(2023, 6, 19, 11, 41, 16, 552, DateTimeKind.Local).AddTicks(8246),
                             PriorityId = (short)1,
                             RequestTypeId = (short)5,
                             SenderId = 1,
@@ -372,7 +386,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 2,
                             CategoryId = (short)2,
-                            Date = new DateTime(2023, 5, 24, 10, 36, 1, 393, DateTimeKind.Local).AddTicks(6520),
+                            Date = new DateTime(2023, 6, 19, 11, 41, 16, 552, DateTimeKind.Local).AddTicks(8255),
                             ExecutorId = 1,
                             PriorityId = (short)3,
                             RequestTypeId = (short)2,
@@ -385,7 +399,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 3,
                             CategoryId = (short)4,
-                            Date = new DateTime(2023, 5, 24, 10, 36, 1, 393, DateTimeKind.Local).AddTicks(6521),
+                            Date = new DateTime(2023, 6, 19, 11, 41, 16, 552, DateTimeKind.Local).AddTicks(8256),
                             ExecutorId = 2,
                             PriorityId = (short)2,
                             RequestTypeId = (short)5,
@@ -398,7 +412,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 4,
                             CategoryId = (short)5,
-                            Date = new DateTime(2023, 5, 24, 10, 36, 1, 393, DateTimeKind.Local).AddTicks(6522),
+                            Date = new DateTime(2023, 6, 19, 11, 41, 16, 552, DateTimeKind.Local).AddTicks(8257),
                             PriorityId = (short)2,
                             RequestTypeId = (short)7,
                             SenderId = 2,
@@ -410,7 +424,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 5,
                             CategoryId = (short)4,
-                            Date = new DateTime(2023, 5, 24, 10, 36, 1, 393, DateTimeKind.Local).AddTicks(6523),
+                            Date = new DateTime(2023, 6, 19, 11, 41, 16, 552, DateTimeKind.Local).AddTicks(8258),
                             ExecutorId = 3,
                             PriorityId = (short)2,
                             RequestTypeId = (short)3,
@@ -744,6 +758,10 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concrete.Comment", b =>
                 {
+                    b.HasOne("Entities.Concrete.File", "File")
+                        .WithOne("Comment")
+                        .HasForeignKey("Entities.Concrete.Comment", "CFileId");
+
                     b.HasOne("Entities.Concrete.Request", "Request")
                         .WithMany("Comments")
                         .HasForeignKey("RequestId")
@@ -755,6 +773,8 @@ namespace DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("File");
 
                     b.Navigation("Request");
 
@@ -799,6 +819,10 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Entities.Concrete.File", "File")
+                        .WithOne("Request")
+                        .HasForeignKey("Entities.Concrete.Request", "RFileId");
+
                     b.HasOne("Entities.Concrete.RequestType", "RequestType")
                         .WithMany("Requests")
                         .HasForeignKey("RequestTypeId")
@@ -819,6 +843,8 @@ namespace DataAccess.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Executor");
+
+                    b.Navigation("File");
 
                     b.Navigation("Priority");
 
@@ -892,6 +918,12 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Entities.Concrete.File", b =>
                 {
+                    b.Navigation("Comment")
+                        .IsRequired();
+
+                    b.Navigation("Request")
+                        .IsRequired();
+
                     b.Navigation("User")
                         .IsRequired();
                 });

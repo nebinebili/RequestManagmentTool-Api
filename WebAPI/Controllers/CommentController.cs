@@ -11,20 +11,17 @@ namespace WebAPI.Controllers
     public class CommentController : ControllerBase
     {
         private readonly ICommentService _commentService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CommentController(ICommentService commentService, IHttpContextAccessor httpContextAccessor)
+        public CommentController(ICommentService commentService)
         {
             _commentService = commentService;
-            _httpContextAccessor = httpContextAccessor;
 
         }
 
         [HttpPost("Add")]
-        public IActionResult Add(AddCommentDto comment)
+        public IActionResult Add([FromForm] AddCommentDto commentDto)
         {
-            int userid = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
-            var result = _commentService.Add(userid,comment.RequestId,comment.Text);
+            var result = _commentService.Add(commentDto);
             if (result.Success)
             {
                 return Ok(result);
@@ -32,10 +29,21 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("GetAll")]
-        public IActionResult GetAll(int requestid)
+        [HttpGet("GetAllByRequestid")]
+        public IActionResult GetAllByRequestid(int requestid)
         {
-            var result = _commentService.GetAll(requestid);
+            var result = _commentService.GetAllByRequestid(requestid);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
+        [HttpPost("AddFileToComment")]
+        public IActionResult AddFileToComment([FromForm] AddFileToCommentDto addFileToCommentDto)
+        {
+            var result = _commentService.AddFileToComment(addFileToCommentDto);
             if (result.Success)
             {
                 return Ok(result);

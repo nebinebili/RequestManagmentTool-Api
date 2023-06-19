@@ -1,6 +1,7 @@
 ﻿using Core.Utilities.Results;
 using Entities.Concrete;
 using Entities.DTOs;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,9 @@ namespace Business.Abstract
 {
     public interface ICommentService
     {
-        IResult Add(int userId, int requestId, string text);
+        IResult Add(AddCommentDto commentDto);
 
-        IDataResult<List<CommentDto>> GetAll(int requestid);
+        IDataResult<List<CommentDto>> GetAllByRequestid(int requestid);
+        IResult AddFileToComment(AddFileToCommentDto addFileToCommentDto);
     }
 }

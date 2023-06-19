@@ -1,4 +1,5 @@
 ﻿using Entities.Abstract;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace Entities.DTOs
         public short CategoryId { get; set; }
         public short PriorityId { get; set; }
         public short RequestTypeId { get; set; }
+        public IFormFile? File { get; set; }
     }
 }

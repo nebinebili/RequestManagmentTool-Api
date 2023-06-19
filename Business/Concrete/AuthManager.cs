@@ -199,9 +199,17 @@ namespace Business.Concrete
                 return result;
             }
 
-            string str = _configuration.GetSection("ImagePath").GetSection("Path").Value;
-            var filePath=_fileHelper.Upload(file, str);
-
+            string str = _configuration.GetSection("FilePaths").GetSection("ImagePath").Value;
+            string filePath;
+            if (user.ImageId == null)
+            {
+              filePath= _fileHelper.Upload(file, str);
+            }
+            else
+            {
+                var currentImage = _unitofWork.File.GetAll(f => f.Id == user.ImageId).SingleOrDefault();
+                filePath= _fileHelper.Update(file, currentImage.Path + "\\" + currentImage.FileName, str);
+            }
 
 
             File imageFile = new File
@@ -214,7 +222,9 @@ namespace Business.Concrete
                 Path = str
             };
 
+            if (user.ImageId != null) _unitofWork.File.Delete(_unitofWork.File.GetAll(f => f.Id == user.ImageId).SingleOrDefault());
             _unitofWork.File.Add(imageFile);
+            
 
             user.ImageId = imageFile.Id;
             _unitofWork.User.Update(user);

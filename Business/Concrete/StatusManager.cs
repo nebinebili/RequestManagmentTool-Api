@@ -5,6 +5,7 @@ using Business.ValidationRules;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using Entities.Enums;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -31,9 +32,9 @@ namespace Business.Concrete
         {
             var userId = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
             Request? request = _unitofWork.Request.GetAllRequest(userId).Where(r=>r.Id==requestId).SingleOrDefault();
-            if (request == null)
+            if (!_unitofWork.Request.GetAllRequest(userId).Any(r => r.Id == requestId))
             {
-                return new ErrorResult(Messages.RequestDoesNotExist);
+                return new ErrorResult(Messages.UserHasNoRequest);
             }
 
             bool checkStatus = StatusValidator.Validate(request, userId, statusId);

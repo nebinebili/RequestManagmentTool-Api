@@ -17,5 +17,7 @@ namespace Entities.Concrete
         public string MimeType { get; set; }
         public long Size { get; set; }
         public User User { get; set; }
+        public Comment Comment { get; set; }
+        public Request Request { get; set; }
     }
 }

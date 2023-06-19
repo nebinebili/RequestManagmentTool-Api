@@ -22,6 +22,7 @@ namespace Entities.Concrete
         public short RequestTypeId { get; set; }
         public int SenderId { get; set; }
         public int? ExecutorId { get; set; }
+        public int? RFileId { get; set; }
 
 
         public Category Category { get; set; }
@@ -30,6 +31,7 @@ namespace Entities.Concrete
         public RequestType RequestType { get; set; }
         public User Executor { get; set; }
         public User Sender { get; set; }
+        public File File { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
         public ICollection<History> Histories { get; set; }

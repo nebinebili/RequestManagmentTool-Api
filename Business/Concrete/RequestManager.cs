@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Business.Abstract;
 using Business.Constants;
+using Core.Utilities.Helpers.FileHelper;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -14,6 +15,8 @@ using System.Runtime.ConstrainedExecution;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using File = Entities.Concrete.File;
+using Microsoft.Extensions.Configuration;
 
 namespace Business.Concrete
 {
@@ -22,14 +25,17 @@ namespace Business.Concrete
         private readonly IUnitofWork _unitofWork;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IFileHelper _fileHelper;
         private List<Request> _requests = new List<Request>();
+        public IConfiguration _configuration { get; }
 
-
-        public RequestManager(IUnitofWork unitofWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public RequestManager(IUnitofWork unitofWork, IMapper mapper, IHttpContextAccessor httpContextAccessor,IConfiguration configuration,IFileHelper fileHelper)
         {
             _unitofWork = unitofWork;
             _mapper = mapper;
             _httpContextAccessor = httpContextAccessor;
+            _configuration = configuration;
+            _fileHelper = fileHelper;
         }
 
         public IResult Add(CreateRequestDto createRequestDto)
@@ -40,10 +46,38 @@ namespace Business.Concrete
             {
                 return new ErrorResult(Messages.NotPermissonCategory);
             }
-            var request = _mapper.Map<Request>(createRequestDto);
-            request.SenderId = userid;
 
-            _unitofWork.Request.Add(request);
+            File requestFile = new File();
+            if (createRequestDto.File != null)
+            {
+                string str = _configuration.GetSection("FilePaths").GetSection("RequestFilepath").Value;
+                var filePath = _fileHelper.Upload(createRequestDto.File, str);
+
+                requestFile.FileOriginalName = createRequestDto.File.FileName;
+                requestFile.Size = createRequestDto.File.Length;
+                requestFile.MimeType = createRequestDto.File.ContentType;
+                requestFile.Extension = Path.GetExtension(filePath);
+                requestFile.FileName = filePath;
+                requestFile.Path = str;
+
+
+
+                _unitofWork.File.Add(requestFile);
+            }
+
+            Request newrequest = new Request
+            {
+                RequestTypeId = createRequestDto.RequestTypeId,
+                Title = createRequestDto.Title,
+                CategoryId = createRequestDto.CategoryId,
+                Text = createRequestDto.Text,
+                PriorityId = createRequestDto.PriorityId,
+                RFileId = requestFile.Id,
+                SenderId = userid
+            };
+
+            
+            _unitofWork.Request.Add(newrequest);
             _unitofWork.Complete();
             return new SuccessResult(Messages.SuccessfullyCreated);
         }
@@ -74,16 +108,32 @@ namespace Business.Concrete
             }
         }
 
-        public IDataResult<List<RequestDto>> GetAllMyRequest(short? statusid, int pagenumber, int pagesize)
+        public IDataResult<List<RequestDto>> GetAllMyRequest(RequestSearchDto requestSearchDto)
         {
             int id = Convert.ToInt32(_httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
 
 
-            _requests = (statusid == null)
-                ? _unitofWork.Request.GetAllMyRequest(id).Skip((pagenumber - 1) * pagesize).OrderByDescending(r => r.Date).Take(pagesize).ToList()
-                : _unitofWork.Request.GetAllMyRequest(id).Where(r => r.StatusId == statusid).Skip((pagenumber - 1) * pagesize).OrderByDescending(r => r.Date).Take(pagesize).ToList();
+            _requests = (requestSearchDto.statusId == null)
+                ? _unitofWork.Request.GetAllMyRequest(id).Skip((requestSearchDto.pageNumber - 1) * requestSearchDto.pageSize).OrderByDescending(r => r.Date).Take(requestSearchDto.pageSize).ToList()
+                : _unitofWork.Request.GetAllMyRequest(id).Where(r => r.StatusId == requestSearchDto.statusId).Skip((requestSearchDto.pageNumber - 1) * requestSearchDto.pageSize).OrderByDescending(r => r.Date).Take(requestSearchDto.pageSize).ToList();
 
+            
             var data = _mapper.Map<List<RequestDto>>(_requests);
+        
+            if (!string.IsNullOrEmpty(requestSearchDto.executorName)) 
+            {
+                var data2 = data.SkipWhile(d => d.ExecutorName == null).ToList();
+                data = data2.Where(d => d.ExecutorName.ToLower().Contains(requestSearchDto.executorName.ToLower())).ToList();
+            } 
+            if (!string.IsNullOrEmpty(requestSearchDto.categoryName)) data = data.Where(d => d.CategoryName.Contains(requestSearchDto.categoryName)).ToList();
+            if (!string.IsNullOrEmpty(requestSearchDto.title)) data = data.Where(d => d.Title.Contains(requestSearchDto.title)).ToList();
+            if (!string.IsNullOrEmpty(requestSearchDto.text)) data = data.Where(d => d.Text.Contains(requestSearchDto.text)).ToList();
+            if (!string.IsNullOrEmpty(requestSearchDto.status)) data = data.Where(d => d.StatusName.Contains(requestSearchDto.status)).ToList();
+            if (!string.IsNullOrEmpty(requestSearchDto.senderName)) data = data.Where(d => d.SenderName.Contains(requestSearchDto.senderName)).ToList();
+            if (!string.IsNullOrEmpty(requestSearchDto.requestId)) data = data.Where(d => d.Id.ToString().Contains(requestSearchDto.requestId)).ToList();
+            if (!string.IsNullOrEmpty(requestSearchDto.date)) data = data.Where(d => d.Date.ToString().Contains(requestSearchDto.date)).ToList();
+
+
 
             return new SuccessDataResult<List<RequestDto>>(data, Messages.SuccessfullyListed);
         }

@@ -252,3 +252,4 @@ C:\Users\Admin\Source\Repos\RequestManagmentTool-Api\WebAPI\obj\Debug\net6.0\ref
 C:\Users\Admin\Source\Repos\RequestManagmentTool-Api\WebAPI\obj\Debug\net6.0\WebAPI.pdb
 C:\Users\Admin\Source\Repos\RequestManagmentTool-Api\WebAPI\obj\Debug\net6.0\WebAPI.genruntimeconfig.cache
 C:\Users\Admin\Source\Repos\RequestManagmentTool-Api\WebAPI\obj\Debug\net6.0\ref\WebAPI.dll
+C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\obj\Debug\net6.0\WebAPI.MvcApplicationPartsAssemblyInfo.cs
