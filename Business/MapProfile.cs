@@ -87,7 +87,6 @@ namespace Business
                 ForMember(dest => dest.PriorityName, opt => opt.MapFrom(src => src.Request.Priority.Name)).
                 ForMember(dest => dest.TypeName, opt => opt.MapFrom(src => src.Type.Name)).
                 ForMember(dest => dest.RequestTypeName, opt => opt.MapFrom(src => src.Request.RequestType.Name));
-                
 
         }
     }
