@@ -56,6 +56,10 @@
               "target": "Package",
               "version": "[6.0.1, )"
             },
+            "ClosedXML": {
+              "target": "Package",
+              "version": "[0.102.0, )"
+            },
             "FluentValidation": {
               "target": "Package",
               "version": "[11.5.1, )"

@@ -26,13 +26,15 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost("ReportsImportToExcel")]
+        [HttpGet("ReportsImportToExcel")]
         public IActionResult ReportsImportToExcel()
         {
             var result = _reportService.ReportImportToExcel();
             if (result.Success)
             {
-                return Ok(result);
+              
+                return File(result.Data, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Reports.xlsx");
+
             }
             return BadRequest(result);
         }

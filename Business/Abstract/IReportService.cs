@@ -12,6 +12,6 @@ namespace Business.Abstract
     {
         IDataResult<List<ReportDto>> GetAllReports();
 
-        IResult ReportImportToExcel();
+        IDataResult<byte[]> ReportImportToExcel();
     }
 }

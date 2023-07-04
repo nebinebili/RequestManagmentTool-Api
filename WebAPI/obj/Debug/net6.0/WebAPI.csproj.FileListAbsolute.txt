@@ -259,3 +259,17 @@ C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\run
 C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
 C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.Pkcs.dll
+C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\Aspose.Cells.dll
+C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\SkiaSharp.dll
+C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\runtimes\osx\native\libSkiaSharp.dylib
+C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\runtimes\win-arm64\native\libSkiaSharp.dll
+C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\runtimes\win-x64\native\libSkiaSharp.dll
+C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\runtimes\win-x86\native\libSkiaSharp.dll
+C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\ClosedXML.dll
+C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\DocumentFormat.OpenXml.dll
+C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\ExcelNumberFormat.dll
+C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\FastMember.dll
+C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\Irony.dll
+C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\SixLabors.Fonts.dll
+C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\System.IO.Packaging.dll
+C:\Users\Admin\source\repos\RequestManagmentTool-Api\WebAPI\bin\Debug\net6.0\XLParser.dll

@@ -1,16 +1,22 @@
-﻿using AutoMapper;
+﻿using Aspose.Cells;
+using AutoMapper;
 using Business.Abstract;
 using Business.Constants;
+using ClosedXML.Excel;
+using Core.Utilities.Helpers.ExcelHelper;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.DTOs;
 using Entities.Enums;
+using FastMember;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using OfficeOpenXml;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -69,22 +75,14 @@ namespace Business.Concrete
             return new SuccessDataResult<List<ReportDto>>(reportdtos, Messages.SuccessfullyListed);
         }
 
-        public IResult ReportImportToExcel()
+        public IDataResult<byte[]> ReportImportToExcel()
         {
-            string str = _configuration.GetSection("FilePaths").GetSection("ExcelFilePath").Value;
-
-            
 
             var data = GetAllReports().Data;
 
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-
-            using(ExcelPackage excel=new ExcelPackage()) 
-            {
-                excel.Workbook.Worksheets.Add("Reports").Cells[1, 1].LoadFromCollection(data, true);
-                excel.SaveAs(new FileInfo(str));
-            }
-            return new SuccessResult();
+            var file=ListToExcelHelpers.ExportToExcel<ReportDto>(data);
+           
+            return new SuccessDataResult<byte[]>(file);
         }
     }
 }
