@@ -52,6 +52,7 @@ namespace DataAccess.Concrete.EntityFramework
         public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
         public DbSet<OperationClaim> OperationClaims { get; set; }
         public DbSet<CategoryUser> CategoryUsers { get; set; }
+        public DbSet<NonWorkingDay> NonWorkingDays { get; set; }
         public DbSet<Entities.Concrete.File> Files { get; set; }
 
     }

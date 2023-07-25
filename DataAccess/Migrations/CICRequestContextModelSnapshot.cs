@@ -253,6 +253,22 @@ namespace DataAccess.Migrations
                     b.ToTable("Histories");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.NonWorkingDay", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NonWorkingDays");
+                });
+
             modelBuilder.Entity("Entities.Concrete.OperationClaim", b =>
                 {
                     b.Property<int>("Id")
@@ -374,7 +390,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 1,
                             CategoryId = (short)3,
-                            Date = new DateTime(2023, 6, 19, 11, 41, 16, 552, DateTimeKind.Local).AddTicks(8246),
+                            Date = new DateTime(2023, 7, 20, 10, 43, 12, 879, DateTimeKind.Local).AddTicks(7154),
                             PriorityId = (short)1,
                             RequestTypeId = (short)5,
                             SenderId = 1,
@@ -386,7 +402,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 2,
                             CategoryId = (short)2,
-                            Date = new DateTime(2023, 6, 19, 11, 41, 16, 552, DateTimeKind.Local).AddTicks(8255),
+                            Date = new DateTime(2023, 7, 20, 10, 43, 12, 879, DateTimeKind.Local).AddTicks(7162),
                             ExecutorId = 1,
                             PriorityId = (short)3,
                             RequestTypeId = (short)2,
@@ -399,7 +415,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 3,
                             CategoryId = (short)4,
-                            Date = new DateTime(2023, 6, 19, 11, 41, 16, 552, DateTimeKind.Local).AddTicks(8256),
+                            Date = new DateTime(2023, 7, 20, 10, 43, 12, 879, DateTimeKind.Local).AddTicks(7164),
                             ExecutorId = 2,
                             PriorityId = (short)2,
                             RequestTypeId = (short)5,
@@ -412,7 +428,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 4,
                             CategoryId = (short)5,
-                            Date = new DateTime(2023, 6, 19, 11, 41, 16, 552, DateTimeKind.Local).AddTicks(8257),
+                            Date = new DateTime(2023, 7, 20, 10, 43, 12, 879, DateTimeKind.Local).AddTicks(7165),
                             PriorityId = (short)2,
                             RequestTypeId = (short)7,
                             SenderId = 2,
@@ -424,7 +440,7 @@ namespace DataAccess.Migrations
                         {
                             Id = 5,
                             CategoryId = (short)4,
-                            Date = new DateTime(2023, 6, 19, 11, 41, 16, 552, DateTimeKind.Local).AddTicks(8258),
+                            Date = new DateTime(2023, 7, 20, 10, 43, 12, 879, DateTimeKind.Local).AddTicks(7165),
                             ExecutorId = 3,
                             PriorityId = (short)2,
                             RequestTypeId = (short)3,

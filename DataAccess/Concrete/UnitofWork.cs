@@ -30,6 +30,7 @@ namespace DataAccess.Concrete
             Status=new EfStatusDal(this._context);
             File=new EfFileDal(this._context);
             History=new EfHistoryDal(this._context);
+            NonWorkingDay=new EfNonWorkindDayDal(this._context);
         }
 
         public IUserDal User { get; private set; }
@@ -45,6 +46,7 @@ namespace DataAccess.Concrete
         public IStatusDal Status { get; private set; }
         public IHistoryDal History { get; private set; }
         public IFileDal File { get; private set; }
+        public INonWorkingDayDal NonWorkingDay { get; private set; }
 
         public void Dispose()
         {

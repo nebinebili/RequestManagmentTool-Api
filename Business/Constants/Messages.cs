@@ -54,6 +54,7 @@ namespace Business.Constants
         public static string NullData = "Data is NUll";
 
         public static string UserHasNoRequest = "User has no request with this id";
+        public static string SuccessfullyDownloaded = "Reports excel file successfully downloaded";
 
         
     }

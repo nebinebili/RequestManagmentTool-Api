@@ -23,6 +23,7 @@ namespace DataAccess.Abstract
         IStatusDal Status { get; }
         IHistoryDal History { get; }
         IFileDal File { get; }
+        INonWorkingDayDal NonWorkingDay { get; }
         int Complete();
     }
 }
